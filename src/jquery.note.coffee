@@ -14,6 +14,7 @@ $.extend $.fn.note,
     url: 'http://localhost:5000/examples/index.html'
     closeImage: '../src/closelabel.png'
     loadingImage: '../src/loading.gif'
+    autoClose: true
   
   init: (el, opts) ->
     $(document).trigger 'init.note', opts
@@ -111,3 +112,4 @@ $.extend $.fn.note,
           $(document).trigger 'afterSuccess.note', data
         complete: (jqXHR, textStatus) ->
           $(note_el).removeClass('loading').children('.popup').children('span').remove()
+          $(document).trigger 'close.note' if opts.autoClose
