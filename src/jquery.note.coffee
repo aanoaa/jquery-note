@@ -11,8 +11,9 @@ $.extend $.fn.note,
   default_options:
     cmd: 'new'
     log: true
+    url: 'http://localhost:5000/examples/index.html'
     closeImage: '../src/closelabel.png'
-    url: 'http://localhost:5000/oops'
+    loadingImage: '../src/loading.gif'
   
   init: (el, opts) ->
     $(document).trigger 'init.note', opts
@@ -43,7 +44,7 @@ $.extend $.fn.note,
     @log "new note" if opts.log
     isOpen = true if $(el).parent().children('div#note').get(0)
     if isOpen
-      @log 'already opened'
+      @log "already opened"
     else
       $(document).bind 'keydown.note', (e) ->
         $(document).trigger 'close.note' if e.keyCode is 27
@@ -70,12 +71,13 @@ $.extend $.fn.note,
       $(el).parent().append(html).children("div#note").children("div.popup").children("a.close")
         .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
         .click(@close)
-        .prev().children('div.note-add').children('a')
+        .prev().children("div.note-add").children("a")
         .click ->
-          note = $(this).parent().prev().children('textarea').val()
-          ajax opts.url, note
+          textarea = $(this).parent().prev().children("textarea")
+          note = textarea.val()
+          ajax opts, note, $(textarea).closest("div#note")
         .closest("#note").css
-          position: 'absolute'
+          position: "absolute"
           left: offset.left
           top: offset.top
         .fadeIn()
@@ -83,23 +85,29 @@ $.extend $.fn.note,
   open: (el, opts) ->
     @log "open note" if opts.log
 
-  ajax: (url, note) ->
+  ajax: (opts, note, note_el) ->
+    debug = off
 
-    $(document).trigger 'beforeSend.note', note
-    res = 'ok'
-    $(document).trigger 'onComplete.note', res
-    ###
-    $.ajax
-      type: "GET"
-      url: url
-      cache: false
-      dataType: "json"
-      data: data
-      form: form
-      methods: methods
-      options: options
-      beforeSend: () ->
-        $(document).trigger 'beforeSend.note', note
-      success: (res) ->
-        $(document).trigger 'onComplete.note' res
-    ###
+    if debug
+      $(document).trigger 'beforeSend.note', note
+      $(document).trigger 'afterSuccess.note', "ok"
+    else
+      $.ajax
+        type: 'GET'
+        url: opts.url
+        cache: false
+        dataType: 'text'
+        beforeSend: (jqXHR, settings) ->
+          popup = $(note_el).addClass("loading").children(".popup")
+          span = $("<span />")
+            .addClass("progress")
+            .css
+              background: opts.loadingImage
+              top: ($(popup).height() / 2) - 16
+              left: ($(popup).width() / 2) - 16
+          $(popup).append("<span class=\"disable\" />").append(span)
+          $(document).trigger 'beforeSend.note', note
+        success: (data, textStatus, jqXHR) ->
+          $(document).trigger 'afterSuccess.note', data
+        complete: (jqXHR, textStatus) ->
+          $(note_el).removeClass('loading').children('.popup').children('span').remove()

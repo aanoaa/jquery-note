@@ -16,8 +16,9 @@
     default_options: {
       cmd: 'new',
       log: true,
+      url: 'http://localhost:5000/examples/index.html',
       closeImage: '../src/closelabel.png',
-      url: 'http://localhost:5000/oops'
+      loadingImage: '../src/loading.gif'
     },
     init: function(el, opts) {
       $(document).trigger('init.note', opts);
@@ -58,7 +59,7 @@
         isOpen = true;
       }
       if (isOpen) {
-        return this.log('already opened');
+        return this.log("already opened");
       } else {
         $(document).bind('keydown.note', function(e) {
           if (e.keyCode === 27) {
@@ -69,12 +70,13 @@
         offset.left += $(el).width();
         html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a href="#" class="button">add</a>\n      </div>\n    </div>\n    <a href="#" class="close"></a>\n  </div>\n</div>';
         ajax = this.ajax;
-        return $(el).parent().append(html).children("div#note").children("div.popup").children("a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(this.close).prev().children('div.note-add').children('a').click(function() {
-          var note;
-          note = $(this).parent().prev().children('textarea').val();
-          return ajax(opts.url, note);
+        return $(el).parent().append(html).children("div#note").children("div.popup").children("a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(this.close).prev().children("div.note-add").children("a").click(function() {
+          var note, textarea;
+          textarea = $(this).parent().prev().children("textarea");
+          note = textarea.val();
+          return ajax(opts, note, $(textarea).closest("div#note"));
         }).closest("#note").css({
-          position: 'absolute',
+          position: "absolute",
           left: offset.left,
           top: offset.top
         }).fadeIn();
@@ -85,26 +87,37 @@
         return this.log("open note");
       }
     },
-    ajax: function(url, note) {
-      var res;
-      $(document).trigger('beforeSend.note', note);
-      res = 'ok';
-      return $(document).trigger('onComplete.note', res);
-      /*
-          $.ajax
-            type: "GET"
-            url: url
-            cache: false
-            dataType: "json"
-            data: data
-            form: form
-            methods: methods
-            options: options
-            beforeSend: () ->
-              $(document).trigger 'beforeSend.note', note
-            success: (res) ->
-              $(document).trigger 'onComplete.note' res
-          */
+    ajax: function(opts, note, note_el) {
+      var debug;
+      debug = false;
+      if (debug) {
+        $(document).trigger('beforeSend.note', note);
+        return $(document).trigger('afterSuccess.note', "ok");
+      } else {
+        return $.ajax({
+          type: 'GET',
+          url: opts.url,
+          cache: false,
+          dataType: 'text',
+          beforeSend: function(jqXHR, settings) {
+            var popup, span;
+            popup = $(note_el).addClass("loading").children(".popup");
+            span = $("<span />").addClass("progress").css({
+              background: opts.loadingImage,
+              top: ($(popup).height() / 2) - 16,
+              left: ($(popup).width() / 2) - 16
+            });
+            $(popup).append("<span class=\"disable\" />").append(span);
+            return $(document).trigger('beforeSend.note', note);
+          },
+          success: function(data, textStatus, jqXHR) {
+            return $(document).trigger('afterSuccess.note', data);
+          },
+          complete: function(jqXHR, textStatus) {
+            return $(note_el).removeClass('loading').children('.popup').children('span').remove();
+          }
+        });
+      }
     }
   });
 }).call(this);

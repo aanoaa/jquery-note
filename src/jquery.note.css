@@ -49,10 +49,6 @@
   opacity:1.0;
 }
 
-#note .loading {
-  text-align: center;
-}
-
 #note .image {
   text-align: center;
 }
@@ -84,30 +80,56 @@
 }
 
 #note .button {
-    font-family:helvetica,arial,freesans,clean,sans-serif;
-    display:inline-block;
-    color:#333;
-    white-space:nowrap;
-    border:none;
-    overflow:visible;
-    cursor:pointer;
-    border:1px solid #d4d4d4;
-    -webkit-border-radius:3px;
-    -moz-border-radius:3px;
-    border-radius:3px;
-    background:#f4f4f4;
-    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f4f4f4',endColorstr='#ececec');
-    background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),to(#ececec));
-    background:-moz-linear-gradient(top,#f4f4f4,#ececec);
-    margin-top: 5px;
-    padding: 3px 10px;
-    text-decoration: none;
+  font-family:helvetica,arial,freesans,clean,sans-serif;
+  display:inline-block;
+  color:#333;
+  white-space:nowrap;
+  border:none;
+  overflow:visible;
+  cursor:pointer;
+  border:1px solid #d4d4d4;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+  background:#f4f4f4;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f4f4f4',endColorstr='#ececec');
+  background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),to(#ececec));
+  background:-moz-linear-gradient(top,#f4f4f4,#ececec);
+  margin-top: 5px;
+  padding: 3px 10px;
+  text-decoration: none;
 }
 
 #note .button:hover {
-    color: white;
-    background:#4183C4;
-    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#4183C4',endColorstr='#3072B3');
-    background:-webkit-gradient(linear,left top,left bottom,from(#4183C4),to(#3072B3));
-    background:-moz-linear-gradient(top,#4183C4,#3072B3);
+  color: white;
+  background:#4183C4;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#4183C4',endColorstr='#3072B3');
+  background:-webkit-gradient(linear,left top,left bottom,from(#4183C4),to(#3072B3));
+  background:-moz-linear-gradient(top,#4183C4,#3072B3);
+}
+
+#note.loading {
+  text-align: center;
+}
+
+#note.loading span {
+  display: block;
+  position: absolute;
+}
+
+#note.loading span.progress {
+  background: url(loading.gif) no-repeat;
+  width: 32px;
+  height: 32px;
+  top: 56px;
+  left: 96px;
+}
+
+#note.loading span.disable {
+  background: gray;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
 }
