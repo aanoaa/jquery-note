@@ -105,7 +105,7 @@ $.extend $.fn.note,
               background: opts.loadingImage
               top: ($(popup).height() / 2) - 16
               left: ($(popup).width() / 2) - 16
-          $(popup).append("<span class=\"disable\" />").append(span)
+          $(popup).prepend("<span class=\"disable\" />").prepend(span)
           $(document).trigger 'beforeSend.note', note
         success: (data, textStatus, jqXHR) ->
           $(document).trigger 'afterSuccess.note', data
