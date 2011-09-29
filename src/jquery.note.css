@@ -27,6 +27,10 @@
   border-radius:4px;
 }
 
+#note .content textarea {
+  margin-top: 18px;
+}
+
 #note .content > p:first-child {
   margin-top:0;
 }
@@ -37,10 +41,10 @@
 
 #note .close {
   position:absolute;
-  top:5px;
+  top:0;
   right:5px;
   padding:2px;
-  background:#fff;
+  background:#E1C08A;
 }
 #note .close img {
   opacity:0.3;
@@ -132,4 +136,31 @@
   opacity: 0.5;
   top: 0;
   left: 0;
+}
+
+#note .note-header,
+#note .note-content {
+  font-size: 10px;
+  width: 200px;
+}
+
+#note .note-header {
+  height: 23px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+#note .note-content {
+  overflow: auto;
+}
+
+#note .note-content pre {
+  background-color: #EEEEEE;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px 3px 3px 3px;
+  color: #444444;
+  font-size: 12px;
+  margin: 1em 0;
+  overflow: auto;
+  padding: 5px;
 }

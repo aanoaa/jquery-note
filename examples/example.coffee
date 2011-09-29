@@ -2,7 +2,7 @@ $ ->
   $(document).bind 'init.note', (e, opts) ->
     console.log "'init.note' fired"
 
-  $(document).bind 'afterClose.note', () ->
+  $(document).bind 'afterClose.note', ->
     console.log "'afterClose.note' fired"
 
   $(document).bind 'beforeSend.note', (e, note) ->

@@ -4,7 +4,7 @@ $.fn.extend
     opts = $.extend {}, self.default_options, options
     $(this).each (i, el) ->
       self.init el, opts
-      $(el).bind 'click.note', () ->
+      $(el).bind 'click.note', ->
         self.bind el, opts
 
 $.extend $.fn.note,
@@ -20,9 +20,9 @@ $.extend $.fn.note,
     $(document).trigger 'init.note', opts
     $(document).bind 'close.note', @close
 
-  close: () ->
+  close: ->
     $(document).unbind 'keydown.note'
-    $('#note').fadeOut () ->
+    $('#note').fadeOut ->
         $(this).remove()
         $(document).trigger('afterClose.note')
 
@@ -85,6 +85,43 @@ $.extend $.fn.note,
 
   open: (el, opts) ->
     @log "open note" if opts.log
+    isOpen = true if $(el).parent().children('div#note').get(0)
+    if isOpen
+      @log "already opened"
+    else
+      $(document).bind 'keydown.note', (e) ->
+        $(document).trigger 'close.note' if e.keyCode is 27
+
+      offset = $(el).offset()
+      offset.left += $(el).width()
+      html = '''
+        <div id="note" style="display:none;">
+          <div class="popup">
+            <div class="content">
+              <div class="note-header">
+                <p>
+                  Hyungsuk Hong (<span>2011-09-01 14:11:31</span>)
+                </p>
+              </div>
+              <div class="note-content">
+                <pre>
+이것은 노트 입니다
+                </pre>
+              </div>
+            </div>
+            <a href="#" class="close"></a>
+          </div>
+        </div>
+      '''
+
+      $(el).parent().append(html).children("div#note").children("div.popup").children("a.close")
+        .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
+        .click(@close)
+        .closest("#note").css
+          position: "absolute"
+          left: offset.left
+          top: offset.top
+        .fadeIn()
 
   ajax: (opts, note, note_el) ->
     debug = off
