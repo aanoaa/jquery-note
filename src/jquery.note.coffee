@@ -20,9 +20,10 @@ $.extend $.fn.note,
     $(document).trigger 'init.note', opts
     $(document).bind 'close.note', @close
 
-  close: ->
-    $(document).unbind 'keydown.note'
-    $('#note').fadeOut ->
+  close: (e, el) ->
+    $(document).unbind "keydown.note"
+    $(el).each ->
+      $(this).fadeOut ->
         $(this).remove()
         $(document).trigger('afterClose.note')
 
@@ -45,11 +46,8 @@ $.extend $.fn.note,
     @log "new note" if opts.log
     isOpen = true if $(el).parent().children('div#note').get(0)
     if isOpen
-      @log "already opened"
+      @log "already opened" if opts.log
     else
-      $(document).bind 'keydown.note', (e) ->
-        $(document).trigger 'close.note' if e.keyCode is 27
-
       offset = $(el).offset()
       offset.left += $(el).width()
       html = '''
@@ -69,9 +67,11 @@ $.extend $.fn.note,
       '''
 
       ajax = @ajax
+      close = @close
       $(el).parent().append(html).children("div#note").children("div.popup").children("a.close")
         .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-        .click(@close)
+        .click (e) ->
+          close e, $(this).closest("#note")
         .prev().children("div.note-add").children("a")
         .click ->
           textarea = $(this).parent().prev().children("textarea")
@@ -83,45 +83,71 @@ $.extend $.fn.note,
           top: offset.top
         .fadeIn()
 
+      $(document).bind "keydown.note",
+        note: $(el).parent().children("div#note"),
+        (e) ->
+          $(document).trigger "close.note", [e.data.note] if e.keyCode is 27
+
   open: (el, opts) ->
     @log "open note" if opts.log
+    opts.notes = [] unless opts.notes
     isOpen = true if $(el).parent().children('div#note').get(0)
     if isOpen
-      @log "already opened"
+      @log "already opened" if opts.log
     else
-      $(document).bind 'keydown.note', (e) ->
-        $(document).trigger 'close.note' if e.keyCode is 27
-
       offset = $(el).offset()
       offset.left += $(el).width()
       html = '''
         <div id="note" style="display:none;">
           <div class="popup">
             <div class="content">
-              <div class="note-header">
-                <p>
-                  Hyungsuk Hong (<span>2011-09-01 14:11:31</span>)
-                </p>
-              </div>
-              <div class="note-content">
-                <pre>
-이것은 노트 입니다
-                </pre>
-              </div>
-            </div>
             <a href="#" class="close"></a>
           </div>
         </div>
       '''
+      note_header_html = '''
+        <div class="note-header">
+          <p></p>
+        </div>
+      '''
+      note_content_html = '''
+        <div class="note-content">
+          <pre></pre>
+        </div>
+      '''
+      note_add_html = '''
+        <div class="note-body">
+          <textarea cols="22" name="note" rows="4"></textarea>
+        </div>
+        <div class="note-add">
+          <a href="#" class="button">add</a>
+        </div>
+      '''
 
-      $(el).parent().append(html).children("div#note").children("div.popup").children("a.close")
+      close = @close
+      $(el).parent().append(html)
+      for note in opts.notes
+        $(note_header_html).find('p').html(note.title).parent().appendTo($(el).parent().find('div.content'))
+        $(note_content_html).find('pre').html(note.note)
+          .parent().appendTo($(el).parent().find('div.content'))
+
+      $(note_add_html).appendTo($(el).parent().find('div.content'))
+      n = $(el).parent().children("div#note")
+
+      $(el).parent().find('a.close')
         .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-        .click(@close)
+        .click (e) =>
+          @close e, n
         .closest("#note").css
           position: "absolute"
           left: offset.left
           top: offset.top
         .fadeIn()
+
+      $(document).bind "keydown.note",
+        note: $(el).parent().children("div#note"),
+        (e) ->
+          $(document).trigger "close.note", [e.data.note] if e.keyCode is 27
 
   ajax: (opts, note, note_el) ->
     debug = off

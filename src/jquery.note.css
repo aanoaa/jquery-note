@@ -152,6 +152,9 @@
 
 #note .note-content {
   overflow: auto;
+  border-bottom-style: solid;
+  border-bottom-color: white;
+  border-width: 1px;
 }
 
 #note .note-content pre {

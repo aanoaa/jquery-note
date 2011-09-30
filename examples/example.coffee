@@ -1,6 +1,6 @@
 $ ->
   $(document).bind 'init.note', (e, opts) ->
-    console.log "'init.note' fired"
+    console.log "'init.note' fired with '#{opts.cmd}' cmd"
 
   $(document).bind 'afterClose.note', ->
     console.log "'afterClose.note' fired"
@@ -12,4 +12,9 @@ $ ->
     console.log "'afterSuccess.note' fired"
 
   $("a[title^=add]").note()
-  $("a[title^=open]").note cmd: 'open'
+  $("a[title^=open]").note
+    cmd: 'open'
+    notes: [
+      { title: 'JEEN Lee', note: "노틉니다노틉니다노틉니다노틉니다노틉니다노틉니다" },
+      { title: 'Hyungsuk Hong', note: '노튼데유' }
+    ]
