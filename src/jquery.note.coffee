@@ -13,6 +13,7 @@ $.extend $.fn.note,
     cmd: 'new'
     log: true
     url: 'http://localhost:5000/examples/index.html'
+    dataType: 'json'
     closeImage: '../src/closelabel.png'
     loadingImage: '../src/loading.gif'
     autoClose: true
@@ -138,14 +139,17 @@ $.extend $.fn.note,
 
   ajax: (opts, note, note_el) ->
     debug = off
-    close = @close
 
     if debug
       $(document).trigger 'beforeSend.note', note
       $(document).trigger 'afterSuccess.note', "ok"
+      $(document).trigger 'close.note', $(note_el) if opts.autoClose
     else
       $.ajax
-        type: 'GET'
+        type: 'POST'
+        data:
+          note: note
+        dataType: opts.dataType
         url: opts.url
         cache: false
         dataType: 'text'
@@ -155,7 +159,7 @@ $.extend $.fn.note,
             .addClass("progress")
             .css
               background: opts.loadingImage
-              top: ($(popup).height() / 2) - 16
+              top: ($(popup).height() / 2) - 16 # wtf
               left: ($(popup).width() / 2) - 16
           $(popup).prepend("<span class=\"disable\" />").prepend(span)
           $(document).trigger 'beforeSend.note', note

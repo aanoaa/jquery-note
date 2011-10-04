@@ -18,6 +18,7 @@
       cmd: 'new',
       log: true,
       url: 'http://localhost:5000/examples/index.html',
+      dataType: 'json',
       closeImage: '../src/closelabel.png',
       loadingImage: '../src/loading.gif',
       autoClose: true
@@ -123,15 +124,21 @@
       }, this));
     },
     ajax: function(opts, note, note_el) {
-      var close, debug;
+      var debug;
       debug = false;
-      close = this.close;
       if (debug) {
         $(document).trigger('beforeSend.note', note);
-        return $(document).trigger('afterSuccess.note', "ok");
+        $(document).trigger('afterSuccess.note', "ok");
+        if (opts.autoClose) {
+          return $(document).trigger('close.note', $(note_el));
+        }
       } else {
         return $.ajax({
-          type: 'GET',
+          type: 'POST',
+          data: {
+            note: note
+          },
+          dataType: opts.dataType,
           url: opts.url,
           cache: false,
           dataType: 'text',
