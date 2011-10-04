@@ -60,87 +60,67 @@
       });
     },
     "new": function(el, opts) {
-      var ajax, close, html, isOpen, offset;
+      var html, note, offset, _ajax, _close;
       if (opts.log) {
         this.log("new note");
       }
-      if ($(el).parent().children('div#note').get(0)) {
-        isOpen = true;
-      }
-      if (isOpen) {
-        if (opts.log) {
-          return this.log("already opened");
+      offset = $(el).offset();
+      offset.left += $(el).width();
+      html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>';
+      _ajax = this.ajax;
+      _close = this.close;
+      note = $(html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
+        return _close($(this).closest("#note"));
+      }).prev().find("div.note-add > a").click(function() {
+        var textarea;
+        textarea = $(this).parent().prev().children("textarea");
+        return _ajax(opts, textarea.val(), $(textarea).closest("div#note"));
+      }).closest("#note").css({
+        position: "absolute",
+        left: offset.left,
+        top: offset.top
+      }).fadeIn().appendTo("body");
+      return $(document).bind("keydown.note", __bind(function(e) {
+        if (e.keyCode === 27) {
+          return this.close(note);
         }
-      } else {
-        offset = $(el).offset();
-        offset.left += $(el).width();
-        html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a href="#" class="button">add</a>\n      </div>\n    </div>\n    <a href="#" class="close"></a>\n  </div>\n</div>';
-        ajax = this.ajax;
-        close = this.close;
-        $(el).parent().append(html).children("div#note").children("div.popup").children("a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
-          return close($(this).closest("#note"));
-        }).prev().children("div.note-add").children("a").click(function() {
-          var note, textarea;
-          textarea = $(this).parent().prev().children("textarea");
-          note = textarea.val();
-          return ajax(opts, note, $(textarea).closest("div#note"));
-        }).closest("#note").css({
-          position: "absolute",
-          left: offset.left,
-          top: offset.top
-        }).fadeIn();
-        return $(document).bind("keydown.note", function(e) {
-          if (e.keyCode === 27) {
-            return close($(el).parent().children("div#note"));
-          }
-        });
-      }
+      }, this));
     },
     open: function(el, opts) {
-      var close, html, isOpen, n, note, note_add_html, note_content_html, note_header_html, offset, _i, _len, _ref;
+      var html, note, note_el, note_html, offset, _ajax, _close, _i, _len, _ref;
       if (opts.log) {
         this.log("open note");
       }
       if (!opts.notes) {
         opts.notes = [];
       }
-      if ($(el).parent().children('div#note').get(0)) {
-        isOpen = true;
+      offset = $(el).offset();
+      offset.left += $(el).width();
+      html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>';
+      note_html = '<div class="note-wrap">\n  <div class="note-header">\n    <p></p>\n  </div>\n  <div class="note-content">\n    <pre></pre>\n  </div>\n</div>';
+      _ajax = this.ajax;
+      _close = this.close;
+      note_el = $(html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
+        return _close($(this).closest("div#note"));
+      }).prev().find("div.note-add > a").click(function() {
+        var textarea;
+        textarea = $(this).parent().prev().children("textarea");
+        return _ajax(opts, textarea.val(), $(textarea).closest("#note"));
+      }).closest("#note").css({
+        position: "absolute",
+        left: offset.left,
+        top: offset.top
+      }).fadeIn().appendTo("body");
+      _ref = opts.notes.reverse();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        note = _ref[_i];
+        $(note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
       }
-      if (isOpen) {
-        if (opts.log) {
-          return this.log("already opened");
+      return $(document).bind("keydown.note", __bind(function(e) {
+        if (e.keyCode === 27) {
+          return this.close(note_el);
         }
-      } else {
-        offset = $(el).offset();
-        offset.left += $(el).width();
-        html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n    <a href="#" class="close"></a>\n  </div>\n</div>';
-        note_header_html = '<div class="note-header">\n  <p></p>\n</div>';
-        note_content_html = '<div class="note-content">\n  <pre></pre>\n</div>';
-        note_add_html = '<div class="note-body">\n  <textarea cols="22" name="note" rows="4"></textarea>\n</div>\n<div class="note-add">\n  <a href="#" class="button">add</a>\n</div>';
-        close = this.close;
-        $(el).parent().append(html);
-        _ref = opts.notes;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          note = _ref[_i];
-          $(note_header_html).find('p').html(note.title).parent().appendTo($(el).parent().find('div.content'));
-          $(note_content_html).find('pre').html(note.note).parent().appendTo($(el).parent().find('div.content'));
-        }
-        $(note_add_html).appendTo($(el).parent().find('div.content'));
-        n = $(el).parent().children("div#note");
-        $(el).parent().find('a.close').append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(__bind(function() {
-          return this.close(n);
-        }, this)).closest("#note").css({
-          position: "absolute",
-          left: offset.left,
-          top: offset.top
-        }).fadeIn();
-        return $(document).bind("keydown.note", function(e) {
-          if (e.keyCode === 27) {
-            return close($(el).parent().children("div#note"));
-          }
-        });
-      }
+      }, this));
     },
     ajax: function(opts, note, note_el) {
       var close, debug;

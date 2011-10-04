@@ -104,6 +104,10 @@
   text-decoration: none;
 }
 
+#note a {
+    cursor: pointer;
+}
+
 #note .button:hover {
   color: white;
   background:#4183C4;

@@ -46,106 +46,95 @@ $.extend $.fn.note,
 
   new: (el, opts) ->
     @log "new note" if opts.log
-    isOpen = true if $(el).parent().children('div#note').get(0)
-    if isOpen
-      @log "already opened" if opts.log
-    else
-      offset = $(el).offset()
-      offset.left += $(el).width()
-      html = '''
-        <div id="note" style="display:none;">
-          <div class="popup">
-            <div class="content">
-              <div class="note-body">
-                <textarea cols="22" name="note" rows="4"></textarea>
-              </div>
-              <div class="note-add">
-                <a href="#" class="button">add</a>
-              </div>
+    offset = $(el).offset()
+    offset.left += $(el).width()
+    html = '''
+      <div id="note" style="display:none;">
+        <div class="popup">
+          <div class="content">
+            <div class="note-body">
+              <textarea cols="22" name="note" rows="4"></textarea>
             </div>
-            <a href="#" class="close"></a>
+            <div class="note-add">
+              <a class="button">add</a>
+            </div>
           </div>
+          <a class="close"></a>
         </div>
-      '''
+      </div>
+    '''
 
-      ajax = @ajax
-      close = @close
-      $(el).parent().append(html).children("div#note").children("div.popup").children("a.close")
-        .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-        .click ->
-          close $(this).closest("#note")
-        .prev().children("div.note-add").children("a")
-        .click ->
-          textarea = $(this).parent().prev().children("textarea")
-          note = textarea.val()
-          ajax opts, note, $(textarea).closest("div#note")
-        .closest("#note").css
-          position: "absolute"
-          left: offset.left
-          top: offset.top
-        .fadeIn()
+    _ajax = @ajax
+    _close = @close
+    note = $(html).find("div.popup > a.close")
+      .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
+      .click ->
+        _close $(this).closest("#note")
+      .prev().find("div.note-add > a")
+      .click ->
+        textarea = $(this).parent().prev().children("textarea")
+        _ajax opts, textarea.val(), $(textarea).closest("div#note")
+      .closest("#note").css
+        position: "absolute"
+        left: offset.left
+        top: offset.top
+      .fadeIn().appendTo("body")
 
-      $(document).bind "keydown.note", (e) ->
-        close $(el).parent().children("div#note") if e.keyCode is 27
+    $(document).bind "keydown.note", (e) =>
+      @close note if e.keyCode is 27
 
   open: (el, opts) ->
     @log "open note" if opts.log
     opts.notes = [] unless opts.notes
-    isOpen = true if $(el).parent().children('div#note').get(0)
-    if isOpen
-      @log "already opened" if opts.log
-    else
-      offset = $(el).offset()
-      offset.left += $(el).width()
-      html = '''
-        <div id="note" style="display:none;">
-          <div class="popup">
-            <div class="content">
-            <a href="#" class="close"></a>
+    offset = $(el).offset()
+    offset.left += $(el).width()
+    html = '''
+      <div id="note" style="display:none;">
+        <div class="popup">
+          <div class="content">
+            <div class="note-body">
+              <textarea cols="22" name="note" rows="4"></textarea>
+            </div>
+            <div class="note-add">
+              <a class="button">add</a>
+            </div>
           </div>
+          <a class="close"></a>
         </div>
-      '''
-      note_header_html = '''
+      </div>
+    '''
+    note_html = '''
+      <div class="note-wrap">
         <div class="note-header">
           <p></p>
         </div>
-      '''
-      note_content_html = '''
         <div class="note-content">
           <pre></pre>
         </div>
-      '''
-      note_add_html = '''
-        <div class="note-body">
-          <textarea cols="22" name="note" rows="4"></textarea>
-        </div>
-        <div class="note-add">
-          <a href="#" class="button">add</a>
-        </div>
-      '''
+      </div>
+    '''
 
-      close = @close
-      $(el).parent().append(html)
-      for note in opts.notes
-        $(note_header_html).find('p').html(note.title).parent().appendTo($(el).parent().find('div.content'))
-        $(note_content_html).find('pre').html(note.note)
-          .parent().appendTo($(el).parent().find('div.content'))
+    _ajax = @ajax
+    _close = @close
+    note_el = $(html).find("div.popup > a.close")
+      .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
+      .click ->
+        _close $(this).closest("div#note")
+      .prev().find("div.note-add > a")
+      .click ->
+        textarea = $(this).parent().prev().children("textarea")
+        _ajax opts, textarea.val(), $(textarea).closest("#note")
+      .closest("#note").css
+        position: "absolute"
+        left: offset.left
+        top: offset.top
+      .fadeIn().appendTo("body")
 
-      $(note_add_html).appendTo($(el).parent().find('div.content'))
-      n = $(el).parent().children("div#note")
+    for note in opts.notes.reverse()
+      $(note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
 
-      $(el).parent().find('a.close')
-        .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-        .click =>
-          @close n
-        .closest("#note").css
-          position: "absolute"
-          left: offset.left
-          top: offset.top
-        .fadeIn()
-
-      $(document).bind "keydown.note", (e) ->
-        close $(el).parent().children("div#note") if e.keyCode is 27
+    $(document).bind "keydown.note", (e) =>
+      @close note_el if e.keyCode is 27
 
   ajax: (opts, note, note_el) ->
     debug = off
