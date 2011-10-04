@@ -2,6 +2,7 @@ $.fn.extend
   note: (options) ->
     self = $.fn.note
     opts = $.extend {}, self.default_options, options
+
     $(this).each (i, el) ->
       self.init el, opts
       $(el).bind 'click.note', ->
@@ -20,12 +21,11 @@ $.extend $.fn.note,
     $(document).trigger 'init.note', opts
     $(document).bind 'close.note', @close
 
-  close: (e, el) ->
-    $(document).unbind "keydown.note"
-    $(el).each ->
-      $(this).fadeOut ->
-        $(this).remove()
-        $(document).trigger('afterClose.note')
+  bind: (el, opts) ->
+    switch opts.cmd
+      when "new" then @new el, opts
+      when "open" then @open el, opts
+      else @error "Unknown command #{opts.cmd}"
 
   log: (msg) ->
     console.log msg
@@ -36,11 +36,12 @@ $.extend $.fn.note,
   error: (msg) ->
     console.error msg
 
-  bind: (el, opts) ->
-    switch opts.cmd
-      when "new" then @new el, opts
-      when "open" then @open el, opts
-      else @error "Unknown command #{opts.cmd}"
+  close: (el) ->
+    $(el).each ->
+      $(this).fadeOut ->
+        $(this).remove()
+        $(document).trigger('afterClose.note')
+        $(document).unbind "keydown.note" if $("#note").size() is 0
 
   new: (el, opts) ->
     @log "new note" if opts.log
@@ -70,8 +71,8 @@ $.extend $.fn.note,
       close = @close
       $(el).parent().append(html).children("div#note").children("div.popup").children("a.close")
         .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-        .click (e) ->
-          close e, $(this).closest("#note")
+        .click ->
+          close $(this).closest("#note")
         .prev().children("div.note-add").children("a")
         .click ->
           textarea = $(this).parent().prev().children("textarea")
@@ -83,10 +84,8 @@ $.extend $.fn.note,
           top: offset.top
         .fadeIn()
 
-      $(document).bind "keydown.note",
-        note: $(el).parent().children("div#note"),
-        (e) ->
-          $(document).trigger "close.note", [e.data.note] if e.keyCode is 27
+      $(document).bind "keydown.note", (e) ->
+        close $(el).parent().children("div#note") if e.keyCode is 27
 
   open: (el, opts) ->
     @log "open note" if opts.log
@@ -136,18 +135,16 @@ $.extend $.fn.note,
 
       $(el).parent().find('a.close')
         .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-        .click (e) =>
-          @close e, n
+        .click =>
+          @close n
         .closest("#note").css
           position: "absolute"
           left: offset.left
           top: offset.top
         .fadeIn()
 
-      $(document).bind "keydown.note",
-        note: $(el).parent().children("div#note"),
-        (e) ->
-          $(document).trigger "close.note", [e.data.note] if e.keyCode is 27
+      $(document).bind "keydown.note", (e) ->
+        close $(el).parent().children("div#note") if e.keyCode is 27
 
   ajax: (opts, note, note_el) ->
     debug = off

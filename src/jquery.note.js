@@ -26,14 +26,15 @@
       $(document).trigger('init.note', opts);
       return $(document).bind('close.note', this.close);
     },
-    close: function(e, el) {
-      $(document).unbind("keydown.note");
-      return $(el).each(function() {
-        return $(this).fadeOut(function() {
-          $(this).remove();
-          return $(document).trigger('afterClose.note');
-        });
-      });
+    bind: function(el, opts) {
+      switch (opts.cmd) {
+        case "new":
+          return this["new"](el, opts);
+        case "open":
+          return this.open(el, opts);
+        default:
+          return this.error("Unknown command " + opts.cmd);
+      }
     },
     log: function(msg) {
       return console.log(msg);
@@ -44,15 +45,16 @@
     error: function(msg) {
       return console.error(msg);
     },
-    bind: function(el, opts) {
-      switch (opts.cmd) {
-        case "new":
-          return this["new"](el, opts);
-        case "open":
-          return this.open(el, opts);
-        default:
-          return this.error("Unknown command " + opts.cmd);
-      }
+    close: function(el) {
+      return $(el).each(function() {
+        return $(this).fadeOut(function() {
+          $(this).remove();
+          $(document).trigger('afterClose.note');
+          if ($("#note").size() === 0) {
+            return $(document).unbind("keydown.note");
+          }
+        });
+      });
     },
     "new": function(el, opts) {
       var ajax, close, html, isOpen, offset;
@@ -72,8 +74,8 @@
         html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a href="#" class="button">add</a>\n      </div>\n    </div>\n    <a href="#" class="close"></a>\n  </div>\n</div>';
         ajax = this.ajax;
         close = this.close;
-        $(el).parent().append(html).children("div#note").children("div.popup").children("a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function(e) {
-          return close(e, $(this).closest("#note"));
+        $(el).parent().append(html).children("div#note").children("div.popup").children("a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
+          return close($(this).closest("#note"));
         }).prev().children("div.note-add").children("a").click(function() {
           var note, textarea;
           textarea = $(this).parent().prev().children("textarea");
@@ -84,11 +86,9 @@
           left: offset.left,
           top: offset.top
         }).fadeIn();
-        return $(document).bind("keydown.note", {
-          note: $(el).parent().children("div#note")
-        }, function(e) {
+        return $(document).bind("keydown.note", function(e) {
           if (e.keyCode === 27) {
-            return $(document).trigger("close.note", [e.data.note]);
+            return close($(el).parent().children("div#note"));
           }
         });
       }
@@ -125,18 +125,16 @@
         }
         $(note_add_html).appendTo($(el).parent().find('div.content'));
         n = $(el).parent().children("div#note");
-        $(el).parent().find('a.close').append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(__bind(function(e) {
-          return this.close(e, n);
+        $(el).parent().find('a.close').append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(__bind(function() {
+          return this.close(n);
         }, this)).closest("#note").css({
           position: "absolute",
           left: offset.left,
           top: offset.top
         }).fadeIn();
-        return $(document).bind("keydown.note", {
-          note: $(el).parent().children("div#note")
-        }, function(e) {
+        return $(document).bind("keydown.note", function(e) {
           if (e.keyCode === 27) {
-            return $(document).trigger("close.note", [e.data.note]);
+            return close($(el).parent().children("div#note"));
           }
         });
       }
