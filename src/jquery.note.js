@@ -46,6 +46,9 @@
       return console.error(msg);
     },
     close: function(el) {
+      if (arguments.length > 1) {
+        el = arguments[1];
+      }
       return $(el).each(function() {
         return $(this).fadeOut(function() {
           $(this).remove();
@@ -140,8 +143,9 @@
       }
     },
     ajax: function(opts, note, note_el) {
-      var debug;
+      var close, debug;
       debug = false;
+      close = this.close;
       if (debug) {
         $(document).trigger('beforeSend.note', note);
         return $(document).trigger('afterSuccess.note', "ok");
@@ -168,7 +172,7 @@
           complete: function(jqXHR, textStatus) {
             $(note_el).removeClass('loading').children('.popup').children('span').remove();
             if (opts.autoClose) {
-              return $(document).trigger('close.note');
+              return $(document).trigger('close.note', $(note_el));
             }
           }
         });

@@ -37,6 +37,7 @@ $.extend $.fn.note,
     console.error msg
 
   close: (el) ->
+    el = arguments[1] if arguments.length > 1
     $(el).each ->
       $(this).fadeOut ->
         $(this).remove()
@@ -148,6 +149,7 @@ $.extend $.fn.note,
 
   ajax: (opts, note, note_el) ->
     debug = off
+    close = @close
 
     if debug
       $(document).trigger 'beforeSend.note', note
@@ -172,4 +174,4 @@ $.extend $.fn.note,
           $(document).trigger 'afterSuccess.note', data
         complete: (jqXHR, textStatus) ->
           $(note_el).removeClass('loading').children('.popup').children('span').remove()
-          $(document).trigger 'close.note' if opts.autoClose
+          $(document).trigger 'close.note', $(note_el) if opts.autoClose
