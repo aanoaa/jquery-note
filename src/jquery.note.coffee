@@ -152,7 +152,6 @@ $.extend $.fn.note,
             ]
         when "open"
           opts.notes?.push new_note
-          console.log opts
         else console.error "Unknown command #{opts.cmd}"
 
       $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
@@ -165,7 +164,6 @@ $.extend $.fn.note,
         dataType: opts.dataType
         url: opts.url
         cache: false
-        dataType: 'text'
         beforeSend: (jqXHR, settings) ->
           popup = $(note).addClass("loading").children(".popup")
           span = $("<span />")
@@ -187,7 +185,6 @@ $.extend $.fn.note,
                 ]
             when "open"
               opts.notes?.push data
-              console.log opts
             else console.error "Unknown command #{opts.cmd}"
           $(document).trigger 'afterSuccess.note', { owner: owner, note: data, count: if opts.notes then opts.notes.length else 1 }
         complete: (jqXHR, textStatus) ->

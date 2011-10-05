@@ -145,7 +145,6 @@
             if ((_ref = opts.notes) != null) {
               _ref.push(new_note);
             }
-            console.log(opts);
             break;
           default:
             console.error("Unknown command " + opts.cmd);
@@ -167,7 +166,6 @@
           dataType: opts.dataType,
           url: opts.url,
           cache: false,
-          dataType: 'text',
           beforeSend: function(jqXHR, settings) {
             var popup, span;
             popup = $(note).addClass("loading").children(".popup");
@@ -193,7 +191,6 @@
                 if ((_ref2 = opts.notes) != null) {
                   _ref2.push(data);
                 }
-                console.log(opts);
                 break;
               default:
                 console.error("Unknown command " + opts.cmd);
