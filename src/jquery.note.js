@@ -2,13 +2,14 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   $.fn.extend({
     note: function(options) {
-      var opts, self;
+      var self;
       self = $.fn.note;
-      opts = $.extend({}, self.default_options, options);
       return $(this).each(function(i, el) {
+        var opts;
+        opts = $.extend({}, self.default_options, options);
         self.init(el, opts);
         return $(el).bind('click.note', function() {
-          return self.bind(el, opts);
+          return self.bind(this, opts);
         });
       });
     }
@@ -75,7 +76,7 @@
       }).prev().find("div.note-add > a").click(function() {
         var textarea;
         textarea = $(this).parent().prev().children("textarea");
-        return _ajax(opts, textarea.val(), $(textarea).closest("div#note"));
+        return _ajax(el, textarea.val(), $(textarea).closest("div#note"), opts);
       }).closest("#note").css({
         position: "absolute",
         left: offset.left,
@@ -106,7 +107,7 @@
       }).prev().find("div.note-add > a").click(function() {
         var textarea;
         textarea = $(this).parent().prev().children("textarea");
-        return _ajax(opts, textarea.val(), $(textarea).closest("#note"));
+        return _ajax(el, textarea.val(), $(textarea).closest("#note"), opts);
       }).closest("#note").css({
         position: "absolute",
         left: offset.left,
@@ -123,20 +124,45 @@
         }
       }, this));
     },
-    ajax: function(opts, note, note_el) {
-      var debug;
-      debug = false;
+    ajax: function(owner, content, note, opts) {
+      var debug, new_note, _ref;
+      debug = true;
       if (debug) {
-        $(document).trigger('beforeSend.note', note);
-        $(document).trigger('afterSuccess.note', "ok");
+        $(document).trigger('beforeSend.note', content);
+        new_note = {
+          title: "Hyungsuk Hong(1982-12-10)",
+          note: content
+        };
+        switch (opts.cmd) {
+          case "new":
+            $(owner).unbind('click.note');
+            $(owner).note($.extend({}, opts, {
+              cmd: 'open',
+              notes: [new_note]
+            }));
+            break;
+          case "open":
+            if ((_ref = opts.notes) != null) {
+              _ref.push(new_note);
+            }
+            console.log(opts);
+            break;
+          default:
+            console.error("Unknown command " + opts.cmd);
+        }
+        $(document).trigger('afterSuccess.note', {
+          owner: owner,
+          note: new_note,
+          count: opts.notes ? opts.notes.length : 1
+        });
         if (opts.autoClose) {
-          return $(document).trigger('close.note', $(note_el));
+          return $(document).trigger('close.note', note);
         }
       } else {
         return $.ajax({
           type: 'POST',
           data: {
-            note: note
+            note: content
           },
           dataType: opts.dataType,
           url: opts.url,
@@ -144,22 +170,22 @@
           dataType: 'text',
           beforeSend: function(jqXHR, settings) {
             var popup, span;
-            popup = $(note_el).addClass("loading").children(".popup");
+            popup = $(note).addClass("loading").children(".popup");
             span = $("<span />").addClass("progress").css({
               background: opts.loadingImage,
               top: ($(popup).height() / 2) - 16,
               left: ($(popup).width() / 2) - 16
             });
             $(popup).prepend("<span class=\"disable\" />").prepend(span);
-            return $(document).trigger('beforeSend.note', note);
+            return $(document).trigger('beforeSend.note', content);
           },
           success: function(data, textStatus, jqXHR) {
             return $(document).trigger('afterSuccess.note', data);
           },
           complete: function(jqXHR, textStatus) {
-            $(note_el).removeClass('loading').children('.popup').children('span').remove();
+            $(note).removeClass('loading').children('.popup').children('span').remove();
             if (opts.autoClose) {
-              return $(document).trigger('close.note', $(note_el));
+              return $(document).trigger('close.note', $(note));
             }
           }
         });

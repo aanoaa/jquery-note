@@ -10,11 +10,13 @@ $ ->
     
   $(document).bind 'afterSuccess.note', (e, data) ->
     console.log "'afterSuccess.note' fired"
+    console.log data
 
   $("a[title^=add]").note()
+
   $("a[title^=open]").note
     cmd: 'open'
     notes: [
-      { title: 'JEEN Lee', note: "노틉니다노틉니다노틉니다노틉니다노틉니다노틉니다" },
-      { title: 'Hyungsuk Hong', note: '노튼데유' }
+      { title: 'JEEN Lee', note: "노 아이엠 놋트 도이칠란토" },
+      { title: 'Hyungsuk Hong', note: '놋튼데유' }
     ]

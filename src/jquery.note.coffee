@@ -1,12 +1,13 @@
 $.fn.extend
   note: (options) ->
     self = $.fn.note
-    opts = $.extend {}, self.default_options, options
-
     $(this).each (i, el) ->
+      opts = $.extend {}, self.default_options, options
       self.init el, opts
       $(el).bind 'click.note', ->
-        self.bind el, opts
+        self.bind @, opts
+
+# $.fn.note 의 scope 안에선(@init, @bind, @log, ...) 한개가 공유된다.
 
 $.extend $.fn.note,
   default_options:
@@ -17,7 +18,7 @@ $.extend $.fn.note,
     closeImage: '../src/closelabel.png'
     loadingImage: '../src/loading.gif'
     autoClose: true
-  
+
   init: (el, opts) ->
     $(document).trigger 'init.note', opts
     $(document).bind 'close.note', @close
@@ -74,7 +75,7 @@ $.extend $.fn.note,
       .prev().find("div.note-add > a")
       .click ->
         textarea = $(this).parent().prev().children("textarea")
-        _ajax opts, textarea.val(), $(textarea).closest("div#note")
+        _ajax el, textarea.val(), $(textarea).closest("div#note"), opts
       .closest("#note").css
         position: "absolute"
         left: offset.left
@@ -124,7 +125,7 @@ $.extend $.fn.note,
       .prev().find("div.note-add > a")
       .click ->
         textarea = $(this).parent().prev().children("textarea")
-        _ajax opts, textarea.val(), $(textarea).closest("#note")
+        _ajax el, textarea.val(), $(textarea).closest("#note"), opts
       .closest("#note").css
         position: "absolute"
         left: offset.left
@@ -137,24 +138,39 @@ $.extend $.fn.note,
     $(document).bind "keydown.note", (e) =>
       @close note_el if e.keyCode is 27
 
-  ajax: (opts, note, note_el) ->
-    debug = off
+  ajax: (owner, content, note, opts) ->
+    debug = on
 
     if debug
-      $(document).trigger 'beforeSend.note', note
-      $(document).trigger 'afterSuccess.note', "ok"
-      $(document).trigger 'close.note', $(note_el) if opts.autoClose
+      $(document).trigger 'beforeSend.note', content
+      new_note = { title: "Hyungsuk Hong(1982-12-10)", note: content }
+
+      switch opts.cmd
+        when "new"
+          $(owner).unbind 'click.note'
+          $(owner).note $.extend {}, opts,
+            cmd: 'open'
+            notes: [
+              new_note
+            ]
+        when "open"
+          opts.notes?.push new_note
+          console.log opts
+        else console.error "Unknown command #{opts.cmd}"
+
+      $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
+      $(document).trigger 'close.note', note if opts.autoClose
     else
       $.ajax
         type: 'POST'
         data:
-          note: note
+          note: content
         dataType: opts.dataType
         url: opts.url
         cache: false
         dataType: 'text'
         beforeSend: (jqXHR, settings) ->
-          popup = $(note_el).addClass("loading").children(".popup")
+          popup = $(note).addClass("loading").children(".popup")
           span = $("<span />")
             .addClass("progress")
             .css
@@ -162,9 +178,9 @@ $.extend $.fn.note,
               top: ($(popup).height() / 2) - 16 # wtf
               left: ($(popup).width() / 2) - 16
           $(popup).prepend("<span class=\"disable\" />").prepend(span)
-          $(document).trigger 'beforeSend.note', note
+          $(document).trigger 'beforeSend.note', content
         success: (data, textStatus, jqXHR) ->
-          $(document).trigger 'afterSuccess.note', data
+          $(document).trigger 'afterSuccess.note', data # ex) data is { title: '', note: '' }
         complete: (jqXHR, textStatus) ->
-          $(note_el).removeClass('loading').children('.popup').children('span').remove()
-          $(document).trigger 'close.note', $(note_el) if opts.autoClose
+          $(note).removeClass('loading').children('.popup').children('span').remove()
+          $(document).trigger 'close.note', $(note) if opts.autoClose
