@@ -10,17 +10,17 @@ $ ->
     
   $(document).bind 'afterSuccess.note', (e, data) ->
     console.log "'afterSuccess.note' fired"
+
+  $(document).bind 'changeStatus.note', (e, data) ->
+    console.log "'changeStatus.note' fired"
     console.log data
 
-  $("a[title^=add]").note
-    debug: on
-    cmd: 'open'
-    autoClose: on
+  $("a").each ->
+    $(this).note
+      debug: on
+      status: $(this).attr('title')
 
-  $("a[title^=open]").note
+  ### also work
+  $("a").note
     debug: on
-    cmd: 'open'
-    notes: [
-      { title: 'JEEN Lee', note: "노 아이엠 놋트 도이칠란토" },
-      { title: 'Hyungsuk Hong', note: '놋튼데유' }
-    ]
+  ###

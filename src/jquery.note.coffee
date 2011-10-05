@@ -25,6 +25,7 @@ $.extend $.fn.note,
               <textarea cols="33" name="note" rows="4"></textarea>
             </div>
             <div class="note-add">
+              <a class="button"></a>
               <a class="button">add</a>
             </div>
           </div>
@@ -85,10 +86,22 @@ $.extend $.fn.note,
       .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
       .click ->
         _close $(this).closest("div#note")
-      .prev().find("div.note-add > a")
+      .prev().find("div.note-add > a:last-child")
       .click ->
         textarea = $(this).parent().prev().children("textarea")
         _ajax el, textarea.val(), $(textarea).closest("#note"), opts
+      .prev().click ->
+        before = $(this).html()
+        $(this).closest('#note').removeClass('open close reopen').addClass(before)
+        switch before
+          when 'open'
+            after = 'close'
+          when 'close'
+            after = 'reopen'
+          when 'reopen'
+            after = 'close'
+        $(this).html(after)
+        $(document).trigger 'changeStatus.note', { before: before, after: after }
       .closest("#note").css
         position: "absolute"
         left: offset.left
@@ -96,6 +109,16 @@ $.extend $.fn.note,
       .fadeIn ->
         $(this).find('textarea').focus()
       .appendTo('body')
+
+    switch opts.status
+      when 'open'
+        note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close')
+      when 'close'
+        note_el.addClass(opts.status).find('div.note-add > a:first-child').html('reopen')
+      when 'reopen'
+        note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close')
+      else
+        note_el.find('div.note-add > a:first-child').html('open')
 
     for note in opts.notes.reverse()
       $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))

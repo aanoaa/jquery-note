@@ -175,3 +175,12 @@
   white-space: -o-pre-wrap;    /* Opera 7 */
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
+
+#note.close .popup {
+  border-color: red;
+}
+
+#note.open .popup,
+#note.reopen .popup {
+  border-color: green;
+}

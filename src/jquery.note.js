@@ -24,7 +24,7 @@
       closeImage: '../src/closelabel.png',
       loadingImage: '../src/loading.gif',
       autoClose: false,
-      html: '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="33" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>',
+      html: '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="33" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button"></a>\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>',
       note_html: '<div class="note-wrap">\n  <div class="note-header">\n    <p></p>\n  </div>\n  <div class="note-content">\n    <pre></pre>\n  </div>\n</div>'
     },
     init: function(el, opts) {
@@ -79,10 +79,29 @@
       _close = this.close;
       note_el = $(opts.html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
         return _close($(this).closest("div#note"));
-      }).prev().find("div.note-add > a").click(function() {
+      }).prev().find("div.note-add > a:last-child").click(function() {
         var textarea;
         textarea = $(this).parent().prev().children("textarea");
         return _ajax(el, textarea.val(), $(textarea).closest("#note"), opts);
+      }).prev().click(function() {
+        var after, before;
+        before = $(this).html();
+        $(this).closest('#note').removeClass('open close reopen').addClass(before);
+        switch (before) {
+          case 'open':
+            after = 'close';
+            break;
+          case 'close':
+            after = 'reopen';
+            break;
+          case 'reopen':
+            after = 'close';
+        }
+        $(this).html(after);
+        return $(document).trigger('changeStatus.note', {
+          before: before,
+          after: after
+        });
       }).closest("#note").css({
         position: "absolute",
         left: offset.left,
@@ -90,6 +109,19 @@
       }).fadeIn(function() {
         return $(this).find('textarea').focus();
       }).appendTo('body');
+      switch (opts.status) {
+        case 'open':
+          note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close');
+          break;
+        case 'close':
+          note_el.addClass(opts.status).find('div.note-add > a:first-child').html('reopen');
+          break;
+        case 'reopen':
+          note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close');
+          break;
+        default:
+          note_el.find('div.note-add > a:first-child').html('open');
+      }
       _ref = opts.notes.reverse();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         note = _ref[_i];
