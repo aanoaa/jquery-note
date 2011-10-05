@@ -7,8 +7,6 @@ $.fn.extend
       $(el).bind 'click.note', ->
         self.bind @, opts
 
-# $.fn.note 의 scope 안에선(@init, @bind, @log, ...) 한개가 공유된다.
-
 $.extend $.fn.note,
   default_options:
     cmd: 'new'
