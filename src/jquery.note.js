@@ -131,6 +131,10 @@
     },
     ajax: function(owner, content, note, opts) {
       var new_note, _ref;
+      if (content === '') {
+        $(note).find('textarea').focus();
+        return;
+      }
       if (opts.debug) {
         $(document).trigger('beforeSend.note', content);
         new_note = {

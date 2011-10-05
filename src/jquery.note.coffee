@@ -130,6 +130,10 @@ $.extend $.fn.note,
       @close note_el if e.keyCode is 27
 
   ajax: (owner, content, note, opts) ->
+    if content is ''
+      $(note).find('textarea').focus()
+      return
+
     if opts.debug
       $(document).trigger 'beforeSend.note', content
       new_note = { title: "Hyungsuk Hong(1982-12-10)", note: content }
