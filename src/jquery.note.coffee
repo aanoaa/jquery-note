@@ -161,17 +161,9 @@ $.extend $.fn.note,
           $(popup).prepend("<span class=\"disable\" />").prepend(span)
           $(document).trigger 'beforeSend.note', content
         success: (data, textStatus, jqXHR) ->
-          switch opts.cmd
-            when "new"
-              $(owner).unbind 'click.note'
-              $(owner).note $.extend {}, opts,
-                cmd: 'open'
-                notes: [
-                  data
-                ]
-            when "open"
-              opts.notes?.push data
-            else console.error "Unknown command #{opts.cmd}"
+          opts.notes?.push data
+          $(opts.note_html).find('p').html(data.title).end().find('pre').html(data.note).end().insertBefore(note.find('.note-body'))
+          $(note).find('textarea').val('').focus()
           $(document).trigger 'afterSuccess.note', { owner: owner, note: data, count: if opts.notes then opts.notes.length else 1 }
         complete: (jqXHR, textStatus) ->
           $(note).removeClass('loading').children('.popup').children('span').remove()

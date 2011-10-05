@@ -176,22 +176,11 @@
           },
           success: function(data, textStatus, jqXHR) {
             var _ref2;
-            switch (opts.cmd) {
-              case "new":
-                $(owner).unbind('click.note');
-                $(owner).note($.extend({}, opts, {
-                  cmd: 'open',
-                  notes: [data]
-                }));
-                break;
-              case "open":
-                if ((_ref2 = opts.notes) != null) {
-                  _ref2.push(data);
-                }
-                break;
-              default:
-                console.error("Unknown command " + opts.cmd);
+            if ((_ref2 = opts.notes) != null) {
+              _ref2.push(data);
             }
+            $(opts.note_html).find('p').html(data.title).end().find('pre').html(data.note).end().insertBefore(note.find('.note-body'));
+            $(note).find('textarea').val('').focus();
             return $(document).trigger('afterSuccess.note', {
               owner: owner,
               note: data,
