@@ -37,16 +37,20 @@ $.extend $.fn.note,
   error: (msg) ->
     console.error msg
 
-  close: (el) ->
-    el = arguments[1] if arguments.length > 1
+  close: ->
+    el = if arguments.length > 1 then arguments[1] else arguments[0]
     $(el).each ->
       $(this).fadeOut ->
         $(this).remove()
         $(document).trigger('afterClose.note')
         $(document).unbind "keydown.note" if $("#note").size() is 0
 
+  closeAll: ->
+    @close $("div#note")
+
   new: (el, opts) ->
     @log "new note" if opts.log
+    do @closeAll
     offset = $(el).offset()
     offset.left += $(el).width()
     html = '''
@@ -54,7 +58,7 @@ $.extend $.fn.note,
         <div class="popup">
           <div class="content">
             <div class="note-body">
-              <textarea cols="22" name="note" rows="4"></textarea>
+              <textarea cols="33" name="note" rows="4"></textarea>
             </div>
             <div class="note-add">
               <a class="button">add</a>
@@ -86,6 +90,7 @@ $.extend $.fn.note,
 
   open: (el, opts) ->
     @log "open note" if opts.log
+    do @closeAll
     opts.notes = [] unless opts.notes
     offset = $(el).offset()
     offset.left += $(el).width()
@@ -94,7 +99,7 @@ $.extend $.fn.note,
         <div class="popup">
           <div class="content">
             <div class="note-body">
-              <textarea cols="22" name="note" rows="4"></textarea>
+              <textarea cols="33" name="note" rows="4"></textarea>
             </div>
             <div class="note-add">
               <a class="button">add</a>
