@@ -16,14 +16,16 @@
   });
   $.extend($.fn.note, {
     default_options: {
-      cmd: 'new',
+      cmd: 'open',
       log: true,
       url: '',
       debug: false,
       dataType: 'json',
       closeImage: '../src/closelabel.png',
       loadingImage: '../src/loading.gif',
-      autoClose: true
+      autoClose: false,
+      html: '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="33" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>',
+      note_html: '<div class="note-wrap">\n  <div class="note-header">\n    <p></p>\n  </div>\n  <div class="note-content">\n    <pre></pre>\n  </div>\n</div>'
     },
     init: function(el, opts) {
       $(document).trigger('init.note', opts);
@@ -48,10 +50,9 @@
     error: function(msg) {
       return console.error(msg);
     },
-    close: function(el) {
-      if (arguments.length > 1) {
-        el = arguments[1];
-      }
+    close: function() {
+      var el;
+      el = arguments.length > 1 ? arguments[1] : arguments[0];
       return $(el).each(function() {
         return $(this).fadeOut(function() {
           $(this).remove();
@@ -62,17 +63,20 @@
         });
       });
     },
+    closeAll: function() {
+      return this.close($("div#note"));
+    },
     "new": function(el, opts) {
-      var html, note, offset, _ajax, _close;
+      var note, offset, _ajax, _close;
       if (opts.log) {
         this.log("new note");
       }
+      this.closeAll();
       offset = $(el).offset();
       offset.left += $(el).width();
-      html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>';
       _ajax = this.ajax;
       _close = this.close;
-      note = $(html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
+      note = $(opts.html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
         return _close($(this).closest("#note"));
       }).prev().find("div.note-add > a").click(function() {
         var textarea;
@@ -90,20 +94,19 @@
       }, this));
     },
     open: function(el, opts) {
-      var html, note, note_el, note_html, offset, _ajax, _close, _i, _len, _ref;
+      var note, note_el, offset, _ajax, _close, _i, _len, _ref;
       if (opts.log) {
         this.log("open note");
       }
+      this.closeAll();
       if (!opts.notes) {
         opts.notes = [];
       }
       offset = $(el).offset();
       offset.left += $(el).width();
-      html = '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="22" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>';
-      note_html = '<div class="note-wrap">\n  <div class="note-header">\n    <p></p>\n  </div>\n  <div class="note-content">\n    <pre></pre>\n  </div>\n</div>';
       _ajax = this.ajax;
       _close = this.close;
-      note_el = $(html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
+      note_el = $(opts.html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
         return _close($(this).closest("div#note"));
       }).prev().find("div.note-add > a").click(function() {
         var textarea;
@@ -117,8 +120,9 @@
       _ref = opts.notes.reverse();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         note = _ref[_i];
-        $(note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
+        $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
       }
+      opts.notes.reverse();
       return $(document).bind("keydown.note", __bind(function(e) {
         if (e.keyCode === 27) {
           return this.close(note_el);
@@ -133,22 +137,11 @@
           title: "Hyungsuk Hong(1982-12-10)",
           note: content
         };
-        switch (opts.cmd) {
-          case "new":
-            $(owner).unbind('click.note');
-            $(owner).note($.extend({}, opts, {
-              cmd: 'open',
-              notes: [new_note]
-            }));
-            break;
-          case "open":
-            if ((_ref = opts.notes) != null) {
-              _ref.push(new_note);
-            }
-            break;
-          default:
-            console.error("Unknown command " + opts.cmd);
+        if ((_ref = opts.notes) != null) {
+          _ref.push(new_note);
         }
+        $(opts.note_html).find('p').html(new_note.title).end().find('pre').html(new_note.note).end().insertBefore(note.find('.note-body'));
+        $(note).find('textarea').val('').focus();
         $(document).trigger('afterSuccess.note', {
           owner: owner,
           note: new_note,

@@ -14,6 +14,7 @@ $ ->
 
   $("a[title^=add]").note
     debug: on
+    cmd: 'open'
 
   $("a[title^=open]").note
     debug: on

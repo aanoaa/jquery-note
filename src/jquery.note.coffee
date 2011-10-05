@@ -9,14 +9,39 @@ $.fn.extend
 
 $.extend $.fn.note,
   default_options:
-    cmd: 'new'
+    cmd: 'open'
     log: true
     url: ''
     debug: off
     dataType: 'json'
     closeImage: '../src/closelabel.png'
     loadingImage: '../src/loading.gif'
-    autoClose: true
+    autoClose: off
+    html: '''
+      <div id="note" style="display:none;">
+        <div class="popup">
+          <div class="content">
+            <div class="note-body">
+              <textarea cols="33" name="note" rows="4"></textarea>
+            </div>
+            <div class="note-add">
+              <a class="button">add</a>
+            </div>
+          </div>
+          <a class="close"></a>
+        </div>
+      </div>
+    '''
+    note_html: '''
+      <div class="note-wrap">
+        <div class="note-header">
+          <p></p>
+        </div>
+        <div class="note-content">
+          <pre></pre>
+        </div>
+      </div>
+    '''
 
   init: (el, opts) ->
     $(document).trigger 'init.note', opts
@@ -53,25 +78,10 @@ $.extend $.fn.note,
     do @closeAll
     offset = $(el).offset()
     offset.left += $(el).width()
-    html = '''
-      <div id="note" style="display:none;">
-        <div class="popup">
-          <div class="content">
-            <div class="note-body">
-              <textarea cols="33" name="note" rows="4"></textarea>
-            </div>
-            <div class="note-add">
-              <a class="button">add</a>
-            </div>
-          </div>
-          <a class="close"></a>
-        </div>
-      </div>
-    '''
 
     _ajax = @ajax
     _close = @close
-    note = $(html).find("div.popup > a.close")
+    note = $(opts.html).find("div.popup > a.close")
       .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
       .click ->
         _close $(this).closest("#note")
@@ -94,35 +104,10 @@ $.extend $.fn.note,
     opts.notes = [] unless opts.notes
     offset = $(el).offset()
     offset.left += $(el).width()
-    html = '''
-      <div id="note" style="display:none;">
-        <div class="popup">
-          <div class="content">
-            <div class="note-body">
-              <textarea cols="33" name="note" rows="4"></textarea>
-            </div>
-            <div class="note-add">
-              <a class="button">add</a>
-            </div>
-          </div>
-          <a class="close"></a>
-        </div>
-      </div>
-    '''
-    note_html = '''
-      <div class="note-wrap">
-        <div class="note-header">
-          <p></p>
-        </div>
-        <div class="note-content">
-          <pre></pre>
-        </div>
-      </div>
-    '''
 
     _ajax = @ajax
     _close = @close
-    note_el = $(html).find("div.popup > a.close")
+    note_el = $(opts.html).find("div.popup > a.close")
       .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
       .click ->
         _close $(this).closest("div#note")
@@ -137,7 +122,7 @@ $.extend $.fn.note,
       .fadeIn().appendTo("body")
 
     for note in opts.notes.reverse()
-      $(note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
+      $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
 
     opts.notes.reverse() # list order back to origin
 
@@ -148,19 +133,9 @@ $.extend $.fn.note,
     if opts.debug
       $(document).trigger 'beforeSend.note', content
       new_note = { title: "Hyungsuk Hong(1982-12-10)", note: content }
-
-      switch opts.cmd
-        when "new"
-          $(owner).unbind 'click.note'
-          $(owner).note $.extend {}, opts,
-            cmd: 'open'
-            notes: [
-              new_note
-            ]
-        when "open"
-          opts.notes?.push new_note
-        else console.error "Unknown command #{opts.cmd}"
-
+      opts.notes?.push new_note
+      $(opts.note_html).find('p').html(new_note.title).end().find('pre').html(new_note.note).end().insertBefore(note.find('.note-body'))
+      $(note).find('textarea').val('').focus()
       $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
       $(document).trigger 'close.note', note if opts.autoClose
     else
