@@ -87,7 +87,9 @@
         position: "absolute",
         left: offset.left,
         top: offset.top
-      }).fadeIn().appendTo("body");
+      }).fadeIn(function() {
+        return $(this).find('textarea').focus();
+      }).appendTo('body');
       _ref = opts.notes.reverse();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         note = _ref[_i];

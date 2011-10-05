@@ -93,7 +93,9 @@ $.extend $.fn.note,
         position: "absolute"
         left: offset.left
         top: offset.top
-      .fadeIn().appendTo("body")
+      .fadeIn ->
+        $(this).find('textarea').focus()
+      .appendTo('body')
 
     for note in opts.notes.reverse()
       $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
