@@ -15,6 +15,7 @@ $ ->
   $("a[title^=add]").note
     debug: on
     cmd: 'open'
+    autoClose: on
 
   $("a[title^=open]").note
     debug: on
