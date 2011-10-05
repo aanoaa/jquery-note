@@ -1,21 +1,36 @@
 ### Options
 
 - cmd
-    new or open
+
+new or open
+
 - log
-    true or false
+
+true or false
+
 - url
-    url for adding note
+
+url for adding note
+
 - dataType
-    xml, json, script, or html
+
+xml, json, script, or html
+
 - closeImage
-    Adjust path to yout circumstance '../src/closelabel.png'
+
+Adjust path to yout circumstance '../src/closelabel.png'
+
 - loadingImage
-    Adjust path to yout circumstance '../src/loading.gif'
+
+Adjust path to yout circumstance '../src/loading.gif'
+
 - autoClose
-    true or false
+
+true or false
+
 - notes
-    Array: see a below example
+
+Array: see a below example
 
     notes: [
         { title: 'First title', note: "First note" },
@@ -31,6 +46,7 @@
       <script type="text/coffeescript" src="../src/jquery.note.coffee"></script>
       <script type="text/coffeescript" src="example.coffee"></script>
       <script type="text/coffeescript">
+        $("a[title^=add]").note()
         $("a[title^=open]").note
           cmd: 'open'
           notes: [
