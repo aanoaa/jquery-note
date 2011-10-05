@@ -18,7 +18,8 @@
     default_options: {
       cmd: 'new',
       log: true,
-      url: 'http://localhost:5000/examples/index.html',
+      url: '',
+      debug: false,
       dataType: 'json',
       closeImage: '../src/closelabel.png',
       loadingImage: '../src/loading.gif',
@@ -125,9 +126,8 @@
       }, this));
     },
     ajax: function(owner, content, note, opts) {
-      var debug, new_note, _ref;
-      debug = true;
-      if (debug) {
+      var new_note, _ref;
+      if (opts.debug) {
         $(document).trigger('beforeSend.note', content);
         new_note = {
           title: "Hyungsuk Hong(1982-12-10)",
@@ -180,7 +180,29 @@
             return $(document).trigger('beforeSend.note', content);
           },
           success: function(data, textStatus, jqXHR) {
-            return $(document).trigger('afterSuccess.note', data);
+            var _ref2;
+            switch (opts.cmd) {
+              case "new":
+                $(owner).unbind('click.note');
+                $(owner).note($.extend({}, opts, {
+                  cmd: 'open',
+                  notes: [data]
+                }));
+                break;
+              case "open":
+                if ((_ref2 = opts.notes) != null) {
+                  _ref2.push(data);
+                }
+                console.log(opts);
+                break;
+              default:
+                console.error("Unknown command " + opts.cmd);
+            }
+            return $(document).trigger('afterSuccess.note', {
+              owner: owner,
+              note: data,
+              count: opts.notes ? opts.notes.length : 1
+            });
           },
           complete: function(jqXHR, textStatus) {
             $(note).removeClass('loading').children('.popup').children('span').remove();

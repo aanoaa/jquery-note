@@ -11,7 +11,8 @@ $.extend $.fn.note,
   default_options:
     cmd: 'new'
     log: true
-    url: 'http://localhost:5000/examples/index.html'
+    url: ''
+    debug: off
     dataType: 'json'
     closeImage: '../src/closelabel.png'
     loadingImage: '../src/loading.gif'
@@ -137,9 +138,7 @@ $.extend $.fn.note,
       @close note_el if e.keyCode is 27
 
   ajax: (owner, content, note, opts) ->
-    debug = on
-
-    if debug
+    if opts.debug
       $(document).trigger 'beforeSend.note', content
       new_note = { title: "Hyungsuk Hong(1982-12-10)", note: content }
 
@@ -178,7 +177,19 @@ $.extend $.fn.note,
           $(popup).prepend("<span class=\"disable\" />").prepend(span)
           $(document).trigger 'beforeSend.note', content
         success: (data, textStatus, jqXHR) ->
-          $(document).trigger 'afterSuccess.note', data # ex) data is { title: '', note: '' }
+          switch opts.cmd
+            when "new"
+              $(owner).unbind 'click.note'
+              $(owner).note $.extend {}, opts,
+                cmd: 'open'
+                notes: [
+                  data
+                ]
+            when "open"
+              opts.notes?.push data
+              console.log opts
+            else console.error "Unknown command #{opts.cmd}"
+          $(document).trigger 'afterSuccess.note', { owner: owner, note: data, count: if opts.notes then opts.notes.length else 1 }
         complete: (jqXHR, textStatus) ->
           $(note).removeClass('loading').children('.popup').children('span').remove()
           $(document).trigger 'close.note', $(note) if opts.autoClose

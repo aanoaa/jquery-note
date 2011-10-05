@@ -12,9 +12,11 @@ $ ->
     console.log "'afterSuccess.note' fired"
     console.log data
 
-  $("a[title^=add]").note()
+  $("a[title^=add]").note
+    debug: on
 
   $("a[title^=open]").note
+    debug: on
     cmd: 'open'
     notes: [
       { title: 'JEEN Lee', note: "노 아이엠 놋트 도이칠란토" },
