@@ -1,0 +1,48 @@
+### Options
+
+- cmd
+    new or open
+- log
+    true or false
+- url
+    url for adding note
+- dataType
+    xml, json, script, or html
+- closeImage
+    Adjust path to yout circumstance '../src/closelabel.png'
+- loadingImage
+    Adjust path to yout circumstance '../src/loading.gif'
+- autoClose
+    true or false
+- notes
+    Array: see a below example
+
+    notes: [
+        { title: 'First title', note: "First note" },
+        { title: 'Second title', note: 'Second note' }
+    ]
+
+### How to use in your CoffeeScript?
+
+    <html>
+    <head>
+      <script type="text/javascript" src="../lib/jquery-1.6.2.js"></script>
+      <script type="text/javascript" src="../lib/coffee-script.js"></script>
+      <script type="text/coffeescript" src="../src/jquery.note.coffee"></script>
+      <script type="text/coffeescript" src="example.coffee"></script>
+      <script type="text/coffeescript">
+        $("a[title^=open]").note
+          cmd: 'open'
+          notes: [
+            { title: 'First title', note: "First note" },
+            { title: 'Second title', note: 'Second note' }
+          ]
+      </script>
+    </head>
+    <body>
+    <ul>
+      <li><a href="#" title="add-note">new note</a></li>
+      <li><a href="#" title="open-note">open note</a></li>
+    </ul>
+    </body>
+    </html>
