@@ -49,7 +49,6 @@ $.extend $.fn.note,
 
   bind: (el, opts) ->
     switch opts.cmd
-      when "new" then @new el, opts
       when "open" then @open el, opts
       else @error "Unknown command #{opts.cmd}"
 
@@ -72,31 +71,6 @@ $.extend $.fn.note,
 
   closeAll: ->
     @close $("div#note")
-
-  new: (el, opts) ->
-    @log "new note" if opts.log
-    do @closeAll
-    offset = $(el).offset()
-    offset.left += $(el).width()
-
-    _ajax = @ajax
-    _close = @close
-    note = $(opts.html).find("div.popup > a.close")
-      .append("<img src=\"#{opts.closeImage}\" class=\"close_image\" title=\"close\" alt=\"close\" />")
-      .click ->
-        _close $(this).closest("#note")
-      .prev().find("div.note-add > a")
-      .click ->
-        textarea = $(this).parent().prev().children("textarea")
-        _ajax el, textarea.val(), $(textarea).closest("div#note"), opts
-      .closest("#note").css
-        position: "absolute"
-        left: offset.left
-        top: offset.top
-      .fadeIn().appendTo("body")
-
-    $(document).bind "keydown.note", (e) =>
-      @close note if e.keyCode is 27
 
   open: (el, opts) ->
     @log "open note" if opts.log

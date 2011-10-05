@@ -33,8 +33,6 @@
     },
     bind: function(el, opts) {
       switch (opts.cmd) {
-        case "new":
-          return this["new"](el, opts);
         case "open":
           return this.open(el, opts);
         default:
@@ -65,33 +63,6 @@
     },
     closeAll: function() {
       return this.close($("div#note"));
-    },
-    "new": function(el, opts) {
-      var note, offset, _ajax, _close;
-      if (opts.log) {
-        this.log("new note");
-      }
-      this.closeAll();
-      offset = $(el).offset();
-      offset.left += $(el).width();
-      _ajax = this.ajax;
-      _close = this.close;
-      note = $(opts.html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
-        return _close($(this).closest("#note"));
-      }).prev().find("div.note-add > a").click(function() {
-        var textarea;
-        textarea = $(this).parent().prev().children("textarea");
-        return _ajax(el, textarea.val(), $(textarea).closest("div#note"), opts);
-      }).closest("#note").css({
-        position: "absolute",
-        left: offset.left,
-        top: offset.top
-      }).fadeIn().appendTo("body");
-      return $(document).bind("keydown.note", __bind(function(e) {
-        if (e.keyCode === 27) {
-          return this.close(note);
-        }
-      }, this));
     },
     open: function(el, opts) {
       var note, note_el, offset, _ajax, _close, _i, _len, _ref;
