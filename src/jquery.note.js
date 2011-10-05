@@ -84,10 +84,10 @@
         textarea = $(this).parent().prev().children("textarea");
         return _ajax(el, textarea.val(), $(textarea).closest("#note"), opts);
       }).prev().click(function() {
-        var after, before;
-        before = $(this).html();
-        $(this).closest('#note').removeClass('open close reopen').addClass(before);
-        switch (before) {
+        var after;
+        opts.status = $(this).html();
+        $(this).closest('#note').removeClass('open close reopen').addClass(opts.status);
+        switch (opts.status) {
           case 'open':
             after = 'close';
             break;
@@ -99,7 +99,7 @@
         }
         $(this).html(after);
         return $(document).trigger('changeStatus.note', {
-          before: before,
+          before: opts.status,
           after: after
         });
       }).closest("#note").css({

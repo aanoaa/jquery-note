@@ -91,9 +91,9 @@ $.extend $.fn.note,
         textarea = $(this).parent().prev().children("textarea")
         _ajax el, textarea.val(), $(textarea).closest("#note"), opts
       .prev().click ->
-        before = $(this).html()
-        $(this).closest('#note').removeClass('open close reopen').addClass(before)
-        switch before
+        opts.status = $(this).html()
+        $(this).closest('#note').removeClass('open close reopen').addClass(opts.status)
+        switch opts.status
           when 'open'
             after = 'close'
           when 'close'
@@ -101,7 +101,7 @@ $.extend $.fn.note,
           when 'reopen'
             after = 'close'
         $(this).html(after)
-        $(document).trigger 'changeStatus.note', { before: before, after: after }
+        $(document).trigger 'changeStatus.note', { before: opts.status, after: after }
       .closest("#note").css
         position: "absolute"
         left: offset.left
