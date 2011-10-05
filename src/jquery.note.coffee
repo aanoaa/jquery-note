@@ -134,6 +134,8 @@ $.extend $.fn.note,
     for note in opts.notes.reverse()
       $(note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
 
+    opts.notes.reverse() # list order back to origin
+
     $(document).bind "keydown.note", (e) =>
       @close note_el if e.keyCode is 27
 
