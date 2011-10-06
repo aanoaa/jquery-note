@@ -184,3 +184,54 @@
 #note.reopen .popup {
   border-color: green;
 }
+
+#note .status {
+  font-size: 11px;
+  border-color: white;
+  border-bottom-style: solid;
+  border-width: 1px;
+  padding: 10px 5px;
+}
+
+#note .status label {
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  color: white;
+  display: inline-block;
+  padding: 5px;
+}
+
+#note .status label:before {
+    content: '';
+}
+
+#note .status label:before {
+    text-align: center;
+}
+
+#note .status label.open,
+#note .status label.reopen {
+  background-color: green;
+}
+
+#note .status label.close {
+  position: inherit;
+  background-color: red;
+}
+
+#note .status p {
+  display: inline;
+  padding: 5px
+}
+
+#note .status p > span.who {
+  font-weight: bold;
+  display: inline-block;
+  width: 125px;
+  overflow: hidden;
+}
+
+#note .status p > span.date {
+  font-size: 10px
+}

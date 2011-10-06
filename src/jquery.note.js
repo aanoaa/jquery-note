@@ -1,5 +1,10 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  $.extend({
+    ucfirst: function(str) {
+      return str.charAt(0).toUpperCase() + str.substring(1);
+    }
+  });
   $.fn.extend({
     note: function(options) {
       var self;
@@ -19,13 +24,15 @@
       cmd: 'open',
       log: true,
       url: '',
+      statusUrl: '',
       debug: false,
       dataType: 'json',
       closeImage: '../src/closelabel.png',
       loadingImage: '../src/loading.gif',
       autoClose: false,
       html: '<div id="note" style="display:none;">\n  <div class="popup">\n    <div class="content">\n      <div class="note-body">\n        <textarea cols="33" name="note" rows="4"></textarea>\n      </div>\n      <div class="note-add">\n        <a class="button"></a>\n        <a class="button">add</a>\n      </div>\n    </div>\n    <a class="close"></a>\n  </div>\n</div>',
-      note_html: '<div class="note-wrap">\n  <div class="note-header">\n    <p></p>\n  </div>\n  <div class="note-content">\n    <pre></pre>\n  </div>\n</div>'
+      note_html: '<div class="note-wrap">\n  <div class="note-header">\n    <p></p>\n  </div>\n  <div class="note-content">\n    <pre></pre>\n  </div>\n</div>',
+      status_html: '<div class="status">\n  <label></label>\n  <p>\n    <span class="who"></span>\n    <span class="date"></span>\n  </p>\n</div>'
     },
     init: function(el, opts) {
       $(document).trigger('init.note', opts);
@@ -65,7 +72,7 @@
       return this.close($("div#note"));
     },
     open: function(el, opts) {
-      var note, note_el, offset, _ajax, _close, _i, _len, _ref;
+      var note, note_el, offset, _ajax, _close, _i, _len, _ref, _status;
       if (opts.log) {
         this.log("open note");
       }
@@ -83,25 +90,6 @@
         var textarea;
         textarea = $(this).parent().prev().children("textarea");
         return _ajax(el, textarea.val(), $(textarea).closest("#note"), opts);
-      }).prev().click(function() {
-        var after;
-        opts.status = $(this).html();
-        $(this).closest('#note').removeClass('open close reopen').addClass(opts.status);
-        switch (opts.status) {
-          case 'open':
-            after = 'close';
-            break;
-          case 'close':
-            after = 'reopen';
-            break;
-          case 'reopen':
-            after = 'close';
-        }
-        $(this).html(after);
-        return $(document).trigger('changeStatus.note', {
-          before: opts.status,
-          after: after
-        });
       }).closest("#note").css({
         position: "absolute",
         left: offset.left,
@@ -109,6 +97,11 @@
       }).fadeIn(function() {
         return $(this).find('textarea').focus();
       }).appendTo('body');
+      _status = this.status;
+      note_el.find('div.note-add a:first-child').click(function() {
+        opts.status = $(this).html();
+        return _status(el, opts.status, $(this).closest("#note"), opts);
+      });
       switch (opts.status) {
         case 'open':
           note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close');
@@ -125,7 +118,11 @@
       _ref = opts.notes.reverse();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         note = _ref[_i];
-        $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
+        if (note.status && note.date && note.who) {
+          $(opts.status_html).find('label').html($.ucfirst(note.status)).removeClass('open reopen close').addClass(note.status).next().children('span.who').html(note.who).next().html(note.date).closest('div.status').prependTo(note_el.find('.content'));
+        } else if (note.title && note.note) {
+          $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
+        }
       }
       opts.notes.reverse();
       return $(document).bind("keydown.note", __bind(function(e) {
@@ -190,6 +187,100 @@
               owner: owner,
               note: data,
               count: opts.notes ? opts.notes.length : 1
+            });
+          },
+          complete: function(jqXHR, textStatus) {
+            $(note).removeClass('loading').children('.popup').children('span').remove();
+            if (opts.autoClose) {
+              return $(document).trigger('close.note', $(note));
+            }
+          }
+        });
+      }
+    },
+    status: function(owner, status, note, opts) {
+      var after, new_note, _ref;
+      if (opts.debug) {
+        $(document).trigger('beforeSend.note', status);
+        new_note = {
+          who: '홍형석',
+          date: '2011-01-01 11:31:21',
+          status: status
+        };
+        if ((_ref = opts.notes) != null) {
+          _ref.push(new_note);
+        }
+        $(opts.status_html).find('label').html($.ucfirst(status)).addClass(status).next().children('span.who').html(new_note.who).next().html(new_note.date).closest('div.status').insertBefore(note.find('.note-body'));
+        $(note).removeClass('open close reopen').addClass(status);
+        switch (status) {
+          case 'open':
+            after = 'close';
+            break;
+          case 'close':
+            after = 'reopen';
+            break;
+          case 'reopen':
+            after = 'close';
+        }
+        $(note).find('div.note-add a:first-child').html(after);
+        $(document).trigger('changeStatus.note', {
+          before: status,
+          after: after
+        });
+        $(document).trigger('afterSuccess.note', {
+          owner: owner,
+          note: new_note,
+          count: opts.notes ? opts.notes.length : 1
+        });
+        if (opts.autoClose) {
+          return $(document).trigger('close.note', note);
+        }
+      } else {
+        return $.ajax({
+          type: 'POST',
+          data: {
+            status: opts.status
+          },
+          dataType: opts.dataType,
+          url: opts.statusUrl,
+          cache: false,
+          beforeSend: function(jqXHR, settings) {
+            var popup, span;
+            popup = $(note).addClass("loading").children(".popup");
+            span = $("<span />").addClass("progress").css({
+              background: opts.loadingImage,
+              top: ($(popup).height() / 2) - 16,
+              left: ($(popup).width() / 2) - 16
+            });
+            $(popup).prepend("<span class=\"disable\" />").prepend(span);
+            return $(document).trigger('beforeSend.note', content);
+          },
+          success: function(data, textStatus, jqXHR) {
+            var _ref2;
+            if ((_ref2 = opts.notes) != null) {
+              _ref2.push(data);
+            }
+            $(opts.status_html).find('label').html($.ucfirst(data.status)).addClass(data.status).next().children('span.who').html(data.who).next().html(data.date).closest('div.status').insertBefore(note.find('.note-body'));
+            $(note).removeClass('open close reopen').addClass(status);
+            switch (status) {
+              case 'open':
+                after = 'close';
+                break;
+              case 'close':
+                after = 'reopen';
+                break;
+              case 'reopen':
+                after = 'close';
+            }
+            $(note).find('div.note-add a:first-child').html(after);
+            $(document).trigger('afterSuccess.note', {
+              owner: owner,
+              note: data,
+              count: opts.notes ? opts.notes.length : 1
+            });
+            return $(document).trigger('changeStatus.note', {
+              before: status,
+              after: after
             });
           },
           complete: function(jqXHR, textStatus) {
