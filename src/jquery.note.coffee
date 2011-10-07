@@ -59,7 +59,7 @@ $.extend $.fn.note,
     '''
 
   init: (el, opts) ->
-    $(document).trigger 'init.note', opts
+    $(document).trigger 'init.note', { owner: el, opts: opts }
     $(document).bind 'close.note', @close
 
   bind: (el, opts) ->
@@ -93,6 +93,9 @@ $.extend $.fn.note,
     opts.notes = [] unless opts.notes
     offset = $(el).offset()
     offset.left += $(el).width()
+
+    # beforeReveal
+    $(document).trigger 'beforeReveal.note', { owner: el, opts: opts }
 
     _ajax = @ajax
     _close = @close
@@ -138,6 +141,9 @@ $.extend $.fn.note,
 
     opts.notes.reverse() # list order back to origin
 
+    # afterReveal
+    $(document).trigger 'afterReveal.note', { owner: el, note: note_el, opts: opts }
+
     $(document).bind "keydown.note", (e) =>
       @close note_el if e.keyCode is 27
 
@@ -155,10 +161,12 @@ $.extend $.fn.note,
       $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
       $(document).trigger 'close.note', note if opts.autoClose
     else
+
+      params = $.extend {}, { note: content }, opts.extraParams
+
       $.ajax
         type: 'POST'
-        data:
-          note: content
+        data: params
         dataType: opts.dataType
         url: opts.url
         cache: false
@@ -204,10 +212,12 @@ $.extend $.fn.note,
       $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
       $(document).trigger 'close.note', note if opts.autoClose
     else
+
+      params = $.extend {}, { status: opts.status }, opts.extraParams
+
       $.ajax
         type: 'POST'
-        data:
-          status: opts.status
+        data: params
         dataType: opts.dataType
         url: opts.statusUrl
         cache: false

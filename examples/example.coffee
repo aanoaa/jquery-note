@@ -11,6 +11,14 @@ $ ->
   $(document).bind 'afterSuccess.note', (e, data) ->
     console.log "'afterSuccess.note' fired"
 
+  $(document).bind 'beforeReveal.note', (e, data) ->
+    console.log "'beforeReveal.note' fired"
+    console.log data
+
+  $(document).bind 'afterReveal.note', (e, data) ->
+    console.log "'afterReveal.note' fired"
+    console.log data
+
   $(document).bind 'changeStatus.note', (e, data) ->
     console.log "'changeStatus.note' fired"
     console.log data

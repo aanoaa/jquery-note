@@ -35,7 +35,10 @@
       status_html: '<div class="status">\n  <label></label>\n  <p>\n    <span class="who"></span>\n    <span class="date"></span>\n  </p>\n</div>'
     },
     init: function(el, opts) {
-      $(document).trigger('init.note', opts);
+      $(document).trigger('init.note', {
+        owner: el,
+        opts: opts
+      });
       return $(document).bind('close.note', this.close);
     },
     bind: function(el, opts) {
@@ -82,6 +85,10 @@
       }
       offset = $(el).offset();
       offset.left += $(el).width();
+      $(document).trigger('beforeReveal.note', {
+        owner: el,
+        opts: opts
+      });
       _ajax = this.ajax;
       _close = this.close;
       note_el = $(opts.html).find("div.popup > a.close").append("<img src=\"" + opts.closeImage + "\" class=\"close_image\" title=\"close\" alt=\"close\" />").click(function() {
@@ -125,6 +132,11 @@
         }
       }
       opts.notes.reverse();
+      $(document).trigger('afterReveal.note', {
+        owner: el,
+        note: note_el,
+        opts: opts
+      });
       return $(document).bind("keydown.note", __bind(function(e) {
         if (e.keyCode === 27) {
           return this.close(note_el);
@@ -132,7 +144,7 @@
       }, this));
     },
     ajax: function(owner, content, note, opts) {
-      var new_note, _ref;
+      var new_note, params, _ref;
       if (content === '') {
         $(note).find('textarea').focus();
         return;
@@ -157,11 +169,12 @@
           return $(document).trigger('close.note', note);
         }
       } else {
+        params = $.extend({}, {
+          note: content
+        }, opts.extraParams);
         return $.ajax({
           type: 'POST',
-          data: {
-            note: content
-          },
+          data: params,
           dataType: opts.dataType,
           url: opts.url,
           cache: false,
@@ -199,7 +212,7 @@
       }
     },
     status: function(owner, status, note, opts) {
-      var after, new_note, _ref;
+      var after, new_note, params, _ref;
       if (opts.debug) {
         $(document).trigger('beforeSend.note', status);
         new_note = {
@@ -236,11 +249,12 @@
           return $(document).trigger('close.note', note);
         }
       } else {
+        params = $.extend({}, {
+          status: opts.status
+        }, opts.extraParams);
         return $.ajax({
           type: 'POST',
-          data: {
-            status: opts.status
-          },
+          data: params,
           dataType: opts.dataType,
           url: opts.statusUrl,
           cache: false,
