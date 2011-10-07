@@ -191,6 +191,7 @@
   border-bottom-style: solid;
   border-width: 1px;
   padding: 10px 5px;
+  width: 290px;
 }
 
 #note .status label {
@@ -200,6 +201,7 @@
   color: white;
   display: inline-block;
   padding: 5px;
+  text-align: center;
 }
 
 #note .status label:before {
@@ -228,10 +230,243 @@
 #note .status p > span.who {
   font-weight: bold;
   display: inline-block;
-  width: 125px;
+  width: 115px;
   overflow: hidden;
 }
 
 #note .status p > span.date {
   font-size: 10px
+}
+
+/* steal from normalize.css */
+#note article,
+#note aside,
+#note details,
+#note figcaption,
+#note figure,
+#note footer,
+#note header,
+#note hgroup,
+#note nav,
+#note section {
+    display: block;
+}
+
+#note audio,
+#note canvas,
+#note video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+#note audio:not([controls]) {
+    display: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+
+#note button,
+#note input,
+#note select,
+#note textarea {
+    font-family: sans-serif;
+}
+
+#note a {
+    color: #00e;
+}
+
+#note a:visited {
+    color: #551a8b;
+}
+
+#note a:focus {
+    outline: thin dotted;
+}
+
+#note a:hover,
+#note a:active {
+    outline: 0;
+}
+
+
+#note abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+#note b, 
+#note strong { 
+    font-weight: bold; 
+}
+
+#note blockquote {
+    margin: 1em 40px;
+}
+
+#note dfn {
+    font-style: italic;
+}
+
+#note mark {
+    background: #ff0;
+    color: #000;
+}
+
+#note pre,
+#note code,
+#note kbd,
+#note samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+#note pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#note q {
+    quotes: none;
+}
+
+#note q:before,
+#note q:after {
+    content: '';
+    content: none;
+}
+
+#note small {
+    font-size: 75%;
+}
+
+#note sub,
+#note sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+#note sup {
+    top: -0.5em;
+}
+
+#note sub {
+    bottom: -0.25em;
+}
+
+#note ul,
+#note ol {
+    margin: 1em 0;
+    padding: 0 0 0 40px;
+}
+
+#note dd {
+    margin: 0 0 0 40px;
+}
+
+#note nav ul,
+#note nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+#note img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/*
+ * Corrects overflow displayed oddly in IE9 
+ */
+
+#note svg:not(:root) {
+    overflow: hidden;
+}
+
+#note figure {
+    margin: 0;
+}
+
+#note form {
+    margin: 0;
+}
+
+#note fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+#note legend {
+    border: 0; /* 1 */
+    *margin-left: -7px; /* 2 */
+}
+
+#note button,
+#note input,
+#note select,
+#note textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+#note button,
+#note input {
+    line-height: normal; /* 1 */
+    *overflow: visible;  /* 2 */
+}
+
+#note table button,
+#note table input {
+    *overflow: auto;
+}
+
+#note button,
+#note input[type="button"], 
+#note input[type="reset"], 
+#note input[type="submit"] {
+    cursor: pointer; /* 1 */
+    -webkit-appearance: button; /* 2 */
+}
+
+#note input[type="checkbox"],
+#note input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+}
+
+#note input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+#note input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+#note button::-moz-focus-inner,
+#note input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+#note textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+#note table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
