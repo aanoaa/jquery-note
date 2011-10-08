@@ -26,14 +26,15 @@ $ ->
   $("a").each ->
     $(this).note
       debug: on
-      status: $(this).attr('title')
       notes: [
         { title: '제목', note: '내용' }
-        { who: '홍형석', date: '2011-01-01 11:31:21', status: 'open' }
         { title: '제목', note: '내용' }
         { title: '제목', note: '내용' }
         { title: '제목', note: '내용' }
-        { who: '홍형석', date: '2011-04-12 17:05:03', status: 'close' }
+        { who: '홍형석', date: '2010-01-01 11:31:21', status: 'open' }
+        { who: '노진석', date: '2011-04-12 17:05:03', status: 'close' }
+        { who: '유용빈', date: '2011-07-09 12:00:23', status: 'reopen' }
+        { who: '이종진', date: '2011-07-10 18:05:03', status: 'close' }
       ]
 
   ### also work

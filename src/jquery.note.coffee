@@ -121,6 +121,19 @@ $.extend $.fn.note,
         opts.status = $(this).html()
         _status el, opts.status, $(this).closest("#note"), opts
 
+    for note in opts.notes.reverse()
+      if note.status and note.date and note.who
+        $(opts.status_html).find('label').html($.ucfirst(note.status)).removeClass('open reopen close').addClass(note.status).next()
+          .children('span.who').html(note.who).next()
+          .html(note.date).closest('div.status').prependTo(note_el.find('.content'))
+          opts.status = note.status
+      else if note.title and note.note
+        $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
+
+    # opts.notes.reverse() # list order back to origin
+    for note in opts.notes.reverse() # quick and dirty
+      opts.status = note.status if note.status and note.date and note.who
+
     switch opts.status
       when 'open'
         note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close')
@@ -130,16 +143,6 @@ $.extend $.fn.note,
         note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close')
       else
         note_el.find('div.note-add > a:first-child').html('open')
-
-    for note in opts.notes.reverse()
-      if note.status and note.date and note.who
-        $(opts.status_html).find('label').html($.ucfirst(note.status)).removeClass('open reopen close').addClass(note.status).next()
-          .children('span.who').html(note.who).next()
-          .html(note.date).closest('div.status').prependTo(note_el.find('.content'))
-      else if note.title and note.note
-        $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'))
-
-    opts.notes.reverse() # list order back to origin
 
     # afterReveal
     $(document).trigger 'afterReveal.note', { owner: el, note: note_el, opts: opts }

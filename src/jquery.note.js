@@ -75,7 +75,7 @@
       return this.close($("div#note"));
     },
     open: function(el, opts) {
-      var note, note_el, offset, _ajax, _close, _i, _len, _ref, _status;
+      var note, note_el, offset, _ajax, _close, _i, _j, _len, _len2, _ref, _ref2, _status;
       if (opts.log) {
         this.log("open note");
       }
@@ -109,6 +109,23 @@
         opts.status = $(this).html();
         return _status(el, opts.status, $(this).closest("#note"), opts);
       });
+      _ref = opts.notes.reverse();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        note = _ref[_i];
+        if (note.status && note.date && note.who) {
+          $(opts.status_html).find('label').html($.ucfirst(note.status)).removeClass('open reopen close').addClass(note.status).next().children('span.who').html(note.who).next().html(note.date).closest('div.status').prependTo(note_el.find('.content'));
+          opts.status = note.status;
+        } else if (note.title && note.note) {
+          $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
+        }
+      }
+      _ref2 = opts.notes.reverse();
+      for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+        note = _ref2[_j];
+        if (note.status && note.date && note.who) {
+          opts.status = note.status;
+        }
+      }
       switch (opts.status) {
         case 'open':
           note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close');
@@ -122,16 +139,6 @@
         default:
           note_el.find('div.note-add > a:first-child').html('open');
       }
-      _ref = opts.notes.reverse();
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        note = _ref[_i];
-        if (note.status && note.date && note.who) {
-          $(opts.status_html).find('label').html($.ucfirst(note.status)).removeClass('open reopen close').addClass(note.status).next().children('span.who').html(note.who).next().html(note.date).closest('div.status').prependTo(note_el.find('.content'));
-        } else if (note.title && note.note) {
-          $(opts.note_html).find('p').html(note.title).end().find('pre').html(note.note).end().prependTo(note_el.find('.content'));
-        }
-      }
-      opts.notes.reverse();
       $(document).trigger('afterReveal.note', {
         owner: el,
         note: note_el,
