@@ -134,6 +134,8 @@ $.extend $.fn.note,
     for note in opts.notes.reverse() # quick and dirty
       opts.status = note.status if note.status and note.date and note.who
 
+    $(el).removeClass('open reopen close').addClass(opts.status)
+
     switch opts.status
       when 'open'
         note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close')
@@ -159,9 +161,9 @@ $.extend $.fn.note,
       $(document).trigger 'beforeSend.note', content
       new_note = { title: "Hyungsuk Hong(1982-12-10)", note: content }
       opts.notes?.push new_note
-      $(opts.note_html).find('p').html(new_note.title).end().find('pre').html(new_note.note).end().insertBefore(note.find('.note-body'))
+      added = $(opts.note_html).find('p').html(new_note.title).end().find('pre').html(new_note.note).end().insertBefore(note.find('.note-body'))
       $(note).find('textarea').val('').focus()
-      $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
+      $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, new_note: added, count: if opts.notes then opts.notes.length else 1 }
       $(document).trigger 'close.note', note if opts.autoClose
     else
 
@@ -185,9 +187,9 @@ $.extend $.fn.note,
           $(document).trigger 'beforeSend.note', content
         success: (data, textStatus, jqXHR) ->
           opts.notes?.push data
-          $(opts.note_html).find('p').html(data.title).end().find('pre').html(data.note).end().insertBefore(note.find('.note-body'))
+          added = $(opts.note_html).find('p').html(data.title).end().find('pre').html(data.note).end().insertBefore(note.find('.note-body'))
           $(note).find('textarea').val('').focus()
-          $(document).trigger 'afterSuccess.note', { owner: owner, note: data, count: if opts.notes then opts.notes.length else 1 }
+          $(document).trigger 'afterSuccess.note', { owner: owner, note: data, new_note: added, count: if opts.notes then opts.notes.length else 1 }
         complete: (jqXHR, textStatus) ->
           $(note).removeClass('loading').children('.popup').children('span').remove()
           $(document).trigger 'close.note', $(note) if opts.autoClose
@@ -197,7 +199,7 @@ $.extend $.fn.note,
       $(document).trigger 'beforeSend.note', status
       new_note = { who: '홍형석', date: '2011-01-01 11:31:21', status: status }
       opts.notes?.push new_note
-      $(opts.status_html).find('label').html($.ucfirst(status)).addClass(status).next()
+      added = $(opts.status_html).find('label').html($.ucfirst(status)).addClass(status).next()
         .children('span.who').html(new_note.who).next()
         .html(new_note.date).closest('div.status').insertBefore(note.find('.note-body'))
 
@@ -211,8 +213,10 @@ $.extend $.fn.note,
           after = 'close'
       $(note).find('div.note-add a:first-child').html(after)
 
+      $(owner).removeClass('open reopen close').addClass(opts.status)
+
       $(document).trigger 'changeStatus.note', { before: status, after: after }
-      $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, count: if opts.notes then opts.notes.length else 1 }
+      $(document).trigger 'afterSuccess.note', { owner: owner, note: new_note, new_note: added, count: if opts.notes then opts.notes.length else 1 }
       $(document).trigger 'close.note', note if opts.autoClose
     else
 
@@ -236,11 +240,12 @@ $.extend $.fn.note,
           $(document).trigger 'beforeSend.note', content
         success: (data, textStatus, jqXHR) ->
           opts.notes?.push data
-          $(opts.status_html).find('label').html($.ucfirst(data.status)).addClass(data.status).next()
+          added = $(opts.status_html).find('label').html($.ucfirst(data.status)).addClass(data.status).next()
             .children('span.who').html(data.who).next()
             .html(data.date).closest('div.status').insertBefore(note.find('.note-body'))
 
           $(note).removeClass('open close reopen').addClass(status)
+          $(owner).removeClass('open reopen close').addClass(status)
           switch status
             when 'open'
               after = 'close'
@@ -250,8 +255,8 @@ $.extend $.fn.note,
               after = 'close'
           $(note).find('div.note-add a:first-child').html(after)
 
-          $(document).trigger 'afterSuccess.note', { owner: owner, note: data, count: if opts.notes then opts.notes.length else 1 }
-          $(document).trigger 'changeStatus.note', { before: status, after: after }
+          $(document).trigger 'afterSuccess.note', { owner: owner, note: data, new_note: added, count: if opts.notes then opts.notes.length else 1 }
+          $(document).trigger 'changeStatus.note', { owner: owner, before: status, after: after }
         complete: (jqXHR, textStatus) ->
           $(note).removeClass('loading').children('.popup').children('span').remove()
           $(document).trigger 'close.note', $(note) if opts.autoClose

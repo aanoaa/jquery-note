@@ -470,3 +470,17 @@
     border-collapse: collapse;
     border-spacing: 0;
 }
+
+a.note {
+    background: url('note_book_normal.png') no-repeat top left;
+    padding-left: 32px;
+}
+
+a.note.open,
+a.note.reopen {
+    background-image: url('note_book_open.png')
+}
+
+a.note.close {
+    background-image: url('note_book_close.png')
+}

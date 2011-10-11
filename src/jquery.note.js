@@ -126,6 +126,7 @@
           opts.status = note.status;
         }
       }
+      $(el).removeClass('open reopen close').addClass(opts.status);
       switch (opts.status) {
         case 'open':
           note_el.addClass(opts.status).find('div.note-add > a:first-child').html('close');
@@ -151,7 +152,7 @@
       }, this));
     },
     ajax: function(owner, content, note, opts) {
-      var new_note, params, _ref;
+      var added, new_note, params, _ref;
       if (content === '') {
         $(note).find('textarea').focus();
         return;
@@ -165,11 +166,12 @@
         if ((_ref = opts.notes) != null) {
           _ref.push(new_note);
         }
-        $(opts.note_html).find('p').html(new_note.title).end().find('pre').html(new_note.note).end().insertBefore(note.find('.note-body'));
+        added = $(opts.note_html).find('p').html(new_note.title).end().find('pre').html(new_note.note).end().insertBefore(note.find('.note-body'));
         $(note).find('textarea').val('').focus();
         $(document).trigger('afterSuccess.note', {
           owner: owner,
           note: new_note,
+          new_note: added,
           count: opts.notes ? opts.notes.length : 1
         });
         if (opts.autoClose) {
@@ -201,11 +203,12 @@
             if ((_ref2 = opts.notes) != null) {
               _ref2.push(data);
             }
-            $(opts.note_html).find('p').html(data.title).end().find('pre').html(data.note).end().insertBefore(note.find('.note-body'));
+            added = $(opts.note_html).find('p').html(data.title).end().find('pre').html(data.note).end().insertBefore(note.find('.note-body'));
             $(note).find('textarea').val('').focus();
             return $(document).trigger('afterSuccess.note', {
               owner: owner,
               note: data,
+              new_note: added,
               count: opts.notes ? opts.notes.length : 1
             });
           },
@@ -219,7 +222,7 @@
       }
     },
     status: function(owner, status, note, opts) {
-      var after, new_note, params, _ref;
+      var added, after, new_note, params, _ref;
       if (opts.debug) {
         $(document).trigger('beforeSend.note', status);
         new_note = {
@@ -230,7 +233,7 @@
         if ((_ref = opts.notes) != null) {
           _ref.push(new_note);
         }
-        $(opts.status_html).find('label').html($.ucfirst(status)).addClass(status).next().children('span.who').html(new_note.who).next().html(new_note.date).closest('div.status').insertBefore(note.find('.note-body'));
+        added = $(opts.status_html).find('label').html($.ucfirst(status)).addClass(status).next().children('span.who').html(new_note.who).next().html(new_note.date).closest('div.status').insertBefore(note.find('.note-body'));
         $(note).removeClass('open close reopen').addClass(status);
         switch (status) {
           case 'open':
@@ -243,6 +246,7 @@
             after = 'close';
         }
         $(note).find('div.note-add a:first-child').html(after);
+        $(owner).removeClass('open reopen close').addClass(opts.status);
         $(document).trigger('changeStatus.note', {
           before: status,
           after: after
@@ -250,6 +254,7 @@
         $(document).trigger('afterSuccess.note', {
           owner: owner,
           note: new_note,
+          new_note: added,
           count: opts.notes ? opts.notes.length : 1
         });
         if (opts.autoClose) {
@@ -281,8 +286,9 @@
             if ((_ref2 = opts.notes) != null) {
               _ref2.push(data);
             }
-            $(opts.status_html).find('label').html($.ucfirst(data.status)).addClass(data.status).next().children('span.who').html(data.who).next().html(data.date).closest('div.status').insertBefore(note.find('.note-body'));
+            added = $(opts.status_html).find('label').html($.ucfirst(data.status)).addClass(data.status).next().children('span.who').html(data.who).next().html(data.date).closest('div.status').insertBefore(note.find('.note-body'));
             $(note).removeClass('open close reopen').addClass(status);
+            $(owner).removeClass('open reopen close').addClass(status);
             switch (status) {
               case 'open':
                 after = 'close';
@@ -297,9 +303,11 @@
             $(document).trigger('afterSuccess.note', {
               owner: owner,
               note: data,
+              new_note: added,
               count: opts.notes ? opts.notes.length : 1
             });
             return $(document).trigger('changeStatus.note', {
+              owner: owner,
               before: status,
               after: after
             });
