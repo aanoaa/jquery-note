@@ -473,7 +473,6 @@
 
 a.note {
     background: url('note_book_normal.png') no-repeat top left;
-    padding-left: 32px;
 }
 
 a.note.open,
