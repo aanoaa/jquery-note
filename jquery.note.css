@@ -1,0 +1,510 @@
+#note {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  margin: 0 15px;
+  text-align: left;
+}
+
+#note:after {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  width: 0;
+  border: 10px solid transparent;
+  border-right-color: white;
+  left: -20px;
+  top: 10px;
+}
+
+#note.open:after,
+#note.reopen:after {
+  border-right-color: green;
+}
+
+#note.close:after {
+  border-right-color: red;
+}
+
+#note .popup{
+  position:relative;
+  border:3px solid rgba(0,0,0,0);
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+  -webkit-box-shadow:0 0 10px rgba(0,0,0,0.4);
+  -moz-box-shadow:0 0 10px rgba(0,0,0,0.4);
+  box-shadow:0 0 10px rgba(0,0,0,0.4);
+}
+
+#note .content {
+  display:table;
+  padding: 5px;
+  background: #E1C08A;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+}
+
+#note .content textarea {
+  margin-top: 18px;
+}
+
+#note .content > p:first-child {
+  margin-top:0;
+}
+
+#note .content > p:last-child {
+  margin-bottom:0;
+}
+
+#note .close {
+  position:absolute;
+  top:0;
+  right:5px;
+  padding:2px;
+  background:#E1C08A;
+}
+#note .close img {
+  opacity:0.3;
+}
+#note .close:hover img {
+  opacity:1.0;
+}
+
+#note .image {
+  text-align: center;
+}
+
+#note img {
+  border: 0;
+  margin: 0;
+}
+
+#note .note-add {
+    text-align: right;
+}
+
+#note_overlay {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height:100%;
+  width:100%;
+}
+
+.note_hide {
+  z-index:-100;
+}
+
+.note_overlayBG {
+  background-color: #000;
+  z-index: 99;
+}
+
+#note .button {
+  font-family:helvetica,arial,freesans,clean,sans-serif;
+  display:inline-block;
+  color:#333;
+  white-space:nowrap;
+  border:none;
+  overflow:visible;
+  cursor:pointer;
+  border:1px solid #d4d4d4;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+  background:#f4f4f4;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f4f4f4',endColorstr='#ececec');
+  background:-webkit-gradient(linear,left top,left bottom,from(#f4f4f4),to(#ececec));
+  background:-moz-linear-gradient(top,#f4f4f4,#ececec);
+  margin-top: 5px;
+  padding: 3px 10px;
+  text-decoration: none;
+}
+
+#note a {
+    cursor: pointer;
+}
+
+#note .button:hover {
+  color: white;
+  background:#4183C4;
+  filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#4183C4',endColorstr='#3072B3');
+  background:-webkit-gradient(linear,left top,left bottom,from(#4183C4),to(#3072B3));
+  background:-moz-linear-gradient(top,#4183C4,#3072B3);
+}
+
+#note.loading {
+  text-align: center;
+}
+
+#note.loading span {
+  display: block;
+  position: absolute;
+}
+
+#note.loading span.progress {
+  background: url(loading.gif) no-repeat;
+  width: 32px;
+  height: 32px;
+  top: 56px;
+  left: 96px;
+}
+
+#note.loading span.disable {
+  background: gray;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+}
+
+#note .note-header,
+#note .note-content {
+  font-size: 10px;
+  width: 300px;
+}
+
+#note .note-header {
+  height: 23px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+#note .note-content {
+  overflow: auto;
+  border-bottom-style: solid;
+  border-bottom-color: white;
+  border-width: 1px;
+}
+
+#note .note-content pre {
+  background-color: #EEEEEE;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px 3px 3px 3px;
+  color: #444444;
+  font-size: 12px;
+  margin: 1em 0;
+  padding: 5px;
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+#note.close .popup {
+  border-color: red;
+}
+
+#note.open .popup,
+#note.reopen .popup {
+  border-color: green;
+}
+
+#note .status {
+  font-size: 11px;
+  border-color: white;
+  border-bottom-style: solid;
+  border-width: 1px;
+  padding: 10px 5px;
+  width: 290px;
+}
+
+#note .status label {
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  color: white;
+  display: inline-block;
+  padding: 5px;
+  text-align: center;
+}
+
+#note .status label:before {
+    content: '';
+}
+
+#note .status label:before {
+    text-align: center;
+}
+
+#note .status label.open,
+#note .status label.reopen {
+  background-color: green;
+}
+
+#note .status label.close {
+  position: inherit;
+  background-color: red;
+}
+
+#note .status p {
+  display: inline;
+  padding: 5px
+}
+
+#note .status p > span.who {
+  font-weight: bold;
+  display: inline-block;
+  width: 115px;
+  overflow: hidden;
+}
+
+#note .status p > span.date {
+  font-size: 10px
+}
+
+/* steal from normalize.css */
+#note article,
+#note aside,
+#note details,
+#note figcaption,
+#note figure,
+#note footer,
+#note header,
+#note hgroup,
+#note nav,
+#note section {
+    display: block;
+}
+
+#note audio,
+#note canvas,
+#note video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+#note audio:not([controls]) {
+    display: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+
+#note button,
+#note input,
+#note select,
+#note textarea {
+    font-family: sans-serif;
+}
+
+#note a {
+    color: #00e;
+}
+
+#note a:visited {
+    color: #551a8b;
+}
+
+#note a:focus {
+    outline: thin dotted;
+}
+
+#note a:hover,
+#note a:active {
+    outline: 0;
+}
+
+
+#note abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+#note b, 
+#note strong { 
+    font-weight: bold; 
+}
+
+#note blockquote {
+    margin: 1em 40px;
+}
+
+#note dfn {
+    font-style: italic;
+}
+
+#note mark {
+    background: #ff0;
+    color: #000;
+}
+
+#note pre,
+#note code,
+#note kbd,
+#note samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+#note pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#note q {
+    quotes: none;
+}
+
+#note q:before,
+#note q:after {
+    content: '';
+    content: none;
+}
+
+#note small {
+    font-size: 75%;
+}
+
+#note sub,
+#note sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+#note sup {
+    top: -0.5em;
+}
+
+#note sub {
+    bottom: -0.25em;
+}
+
+#note ul,
+#note ol {
+    margin: 1em 0;
+    padding: 0 0 0 40px;
+}
+
+#note dd {
+    margin: 0 0 0 40px;
+}
+
+#note nav ul,
+#note nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+#note img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/*
+ * Corrects overflow displayed oddly in IE9 
+ */
+
+#note svg:not(:root) {
+    overflow: hidden;
+}
+
+#note figure {
+    margin: 0;
+}
+
+#note form {
+    margin: 0;
+}
+
+#note fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+#note legend {
+    border: 0; /* 1 */
+    *margin-left: -7px; /* 2 */
+}
+
+#note button,
+#note input,
+#note select,
+#note textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+#note button,
+#note input {
+    line-height: normal; /* 1 */
+    *overflow: visible;  /* 2 */
+}
+
+#note table button,
+#note table input {
+    *overflow: auto;
+}
+
+#note button,
+#note input[type="button"], 
+#note input[type="reset"], 
+#note input[type="submit"] {
+    cursor: pointer; /* 1 */
+    -webkit-appearance: button; /* 2 */
+}
+
+#note input[type="checkbox"],
+#note input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+}
+
+#note input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+#note input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+#note button::-moz-focus-inner,
+#note input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+#note textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+#note table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+a.note {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: url('note_book_normal.png') no-repeat top left;
+    position: absolute;
+    left: 0;
+}
+
+a.note.open,
+a.note.reopen {
+    background-image: url('note_book_open.png')
+}
+
+a.note.close {
+    background-image: url('note_book_close.png')
+}
