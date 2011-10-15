@@ -100,7 +100,7 @@
       }).closest("#note").css({
         position: "absolute",
         left: offset.left,
-        top: offset.top
+        top: offset.top - 10
       }).fadeIn(function() {
         return $(this).find('textarea').focus();
       }).appendTo('body');
