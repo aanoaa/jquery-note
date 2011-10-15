@@ -23,6 +23,10 @@ $ ->
     console.log "'changeStatus.note' fired"
     console.log data
 
+  $("a.note").note
+    debug: on
+
+  ###
   $("a").each ->
     $(this).note
       debug: on
@@ -36,6 +40,7 @@ $ ->
         { who: '유용빈', date: '2011-07-09 12:00:23', status: 'reopen' }
         { who: '이종진', date: '2011-07-10 18:05:03', status: 'close' }
       ]
+  ###
 
   ### also work
   $("a").note

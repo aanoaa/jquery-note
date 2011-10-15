@@ -7,6 +7,26 @@
   text-align: left;
 }
 
+#note:after {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  width: 0;
+  border: 10px solid transparent;
+  border-right-color: white;
+  left: -20px;
+  top: 10px;
+}
+
+#note.open:after,
+#note.reopen:after {
+  border-right-color: green;
+}
+
+#note.close:after {
+  border-right-color: red;
+}
+
 #note .popup{
   position:relative;
   border:3px solid rgba(0,0,0,0);
@@ -472,7 +492,12 @@
 }
 
 a.note {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
     background: url('note_book_normal.png') no-repeat top left;
+    position: absolute;
+    left: 0;
 }
 
 a.note.open,

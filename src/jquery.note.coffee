@@ -110,7 +110,7 @@ $.extend $.fn.note,
       .closest("#note").css
         position: "absolute"
         left: offset.left
-        top: offset.top
+        top: offset.top - 10
       .fadeIn ->
         $(this).find('textarea').focus()
       .appendTo('body')
