@@ -5,8 +5,8 @@ $.extend
 $.fn.extend
   note: (options) ->
     self = $.fn.note
+    opts = $.extend {}, self.default_options, options
     $(this).each (i, el) ->
-      opts = $.extend {}, self.default_options, options
       self.init el, opts
       $(el).bind 'click.note', ->
         self.bind @, opts
