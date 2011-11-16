@@ -496,8 +496,6 @@ a.note {
     height: 16px;
     display: inline-block;
     background: url('note_book_normal.png') no-repeat top left;
-    position: absolute;
-    left: 0;
 }
 
 a.note.open,
