@@ -6,7 +6,7 @@ body.
 
 [Demo](http://aanoaa.github.com/jquery-note)
 
-![capture](http://cloud.github.com/downloads/aanoaa/jquery-note/note.png)
+![capture](https://github.com/downloads/aanoaa/jquery-note/note.png)
 
 
 Usage
@@ -65,10 +65,10 @@ Usage
 
     param: `note` and `$note.extraParams`
 
-- statusUrl - POST target url for adding a status('open|close|reopen')
+- statusUrl - POST target url for adding a status(`open`|`close`|`reopen`)
     on ajax
 
-    param: `note` and `$note.extraParams`
+    param: `status` and `$note.extraParams`
 
 - debug - true|false 
 - closeImage - `src/closelabel.png` path
