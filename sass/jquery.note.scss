@@ -1,0 +1,124 @@
+@import "compass";
+@import "fancy-buttons";
+$sans: "PT Sans", "Helvetica Neue", Arial, sans-serif !default;
+$serif: "PT Serif", Georgia, Times, "Times New Roman", serif !default;
+$mono: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !default;
+$button-color: #dddddd;
+$background-color: lighten(yellow, 45%);
+@mixin border($color: #dddddd, $width: 3px) {
+    border-style: solid;
+    border-width: $width;
+    border-color: $color;
+}
+#note {
+    font: 12px $sans, $mono, $serif;
+    background-color: $background-color;
+    width: 300px;
+    padding: 0.5em;
+    @include border-radius;
+    @include box-shadow;
+    @include border;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    span.user {
+        font-weight: bold;
+    }
+    span.timestamp {
+        text-align: right;
+    }
+    a.button {
+        @include fancy-button($button-color);
+        font-size: 1em;
+    }
+    > div.status {
+        padding-bottom: 0.5em;
+        margin-bottom: 0.5em;
+        border-bottom-style: solid;
+        border-width: 1px;
+        border-color: black;
+        > label {
+            display: inline-block;
+            width: 15%;
+            padding: 0.5em;
+            text-align: center;
+            @include border-radius;
+            @include border(black, 1px);
+            border-width: 1px;
+        }
+        > span {
+            display: inline-block;
+        }
+        > span.user {
+            width: 35%;
+        }
+        > span.timestamp {
+            width: 40%;
+        }
+        &.open, &.reopen {
+            label {
+                background-color: lighten(green, 20%);
+            }
+        }
+        &.close {
+            label {
+                background-color: lighten(red, 10%);
+            }
+        }
+    }
+    > div.content {
+        padding-bottom: 0.5em;
+        margin-bottom: 0.5em;
+        border-bottom-style: solid;
+        border-width: 1px;
+        border-color: black;
+        > div.header {
+            > span {
+                display: inline-block;
+            }
+            > span.user {
+                width: 50%;
+            }
+            > span.timestamp {
+                width: 46%;
+            }
+        }
+        > div.body {
+            > pre {
+                font-family: $mono;
+                padding: 0.5em;
+                color: white;
+                background-color: gray;
+                @include border-radius;
+                overflow: auto;
+            }
+        }
+    }
+    > div.memo {
+        textarea {
+            width: 98%;
+            height: 5em;
+        }
+        > ul.menu {
+            margin: 0;
+            padding: 0.5em 0 0 0;
+            text-align: right;
+            > li {
+                display: inline;
+            }
+        }
+    }
+    &.open, &.reopen {
+        @include border(lighten(green, 20%));
+    }
+    &.close {
+        @include border(lighten(red, 10%));
+    }
+    > a.close {
+        position:absolute;
+        top:0;
+        right:0;
+        padding:2px;
+        background: #ffffff;
+    }
+}

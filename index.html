@@ -8,57 +8,16 @@
     <script type="text/javascript" src="script/jquery.note.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
-        //$("a[title=note]").note();
+        $("a[title=note]").each(function() {
+          $(this).note();
+        });
       })
     </script>
 </head>
 <body>
-
-  <div id="note" class="close">
-    <div class="status open">
-      <label>Open</label>
-      <span class="user">Silex Dev</span>
-      <span class="timestamp">2011-01-01</span>
-    </div>
-    <div class="status close">
-      <label>Close</label>
-      <span class="user">Silex Dev</span>
-      <span class="timestamp">2011-01-01</span>
-    </div>
-    <div class="status reopen">
-      <label>Reopen</label>
-      <span class="user">Silex Dev</span>
-      <span class="timestamp">2011-01-01</span>
-    </div>
-    <div class="content">
-      <div class="header">
-        <span class="user">Silex Dev</span>
-        <span class="timestamp">2011-01-01</span>
-      </div>
-      <div class="body">
-        <pre>foo bar baz
-안녕하세요 0101010
-반갑습니다.
-</pre>
-      </div>
-    </div>
-    <div class="status close">
-      <label>Close</label>
-      <span class="user">Silex Dev</span>
-      <span class="timestamp">2011-01-01</span>
-    </div>
-    <div class="memo">
-      <textarea>oops</textarea>
-      <ul class="menu">
-        <li><a class="button">open</a></li>
-        <li><a class="button">add</a></li>
-      </ul>
-    </div>
-  </div>
+  <ul>
+    <li><a title="note">note</a></li>
+    <li><a title="note">another note</a>
+  </ul>
 </body>
 </html>
-
-
-
-
-

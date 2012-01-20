@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>jquery-note</title>
+    <link rel="stylesheet" href="css/jquery.note.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="script/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="script/jquery.note.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        //$("a[title=note]").note();
+      })
+    </script>
+</head>
+<body>
+
+  <div id="note" class="close overlay">
+    <div class="status open">
+      <label>Open</label>
+      <span class="user">Silex Dev</span>
+      <span class="timestamp">2011-01-01</span>
+    </div>
+    <div class="status close">
+      <label>Close</label>
+      <span class="user">Silex Dev</span>
+      <span class="timestamp">2011-01-01</span>
+    </div>
+    <div class="status reopen">
+      <label>Reopen</label>
+      <span class="user">Silex Dev</span>
+      <span class="timestamp">2011-01-01</span>
+    </div>
+    <div class="content">
+      <div class="header">
+        <span class="user">Silex Dev</span>
+        <span class="timestamp">2011-01-01</span>
+      </div>
+      <div class="body">
+        <pre>foo bar baz
+안녕하세요 0101010
+반갑습니다.
+</pre>
+      </div>
+    </div>
+    <div class="status close">
+      <label>Close</label>
+      <span class="user">Silex Dev</span>
+      <span class="timestamp">2011-01-01</span>
+    </div>
+    <div class="memo">
+      <textarea>oops</textarea>
+      <ul class="menu">
+        <li><a class="button">open</a></li>
+        <li><a class="button">add</a></li>
+      </ul>
+    </div>
+    <a class="close"></a>
+  </div>
+</body>
+</html>

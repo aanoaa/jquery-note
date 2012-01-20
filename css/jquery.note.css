@@ -2,7 +2,7 @@
 /* line 177, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
 .fancy-button-reset-base-class, #note a.button {
   font-family: "Lucida Grande", Lucida, Arial, sans-serif;
-  background: url('images/button_bg.png?1327025931') repeat-x bottom left;
+  background: url('/images/button_bg.png?1327025931') repeat-x bottom left;
   margin: 0;
   width: auto;
   overflow: visible;
@@ -24,7 +24,7 @@
 
 /* line 13, ../sass/jquery.note.scss */
 #note {
-  font: 0.75em "PT Sans", "Helvetica Neue", Arial, sans-serif, Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace, "PT Serif", Georgia, Times, "Times New Roman", serif;
+  font: 12px "PT Sans", "Helvetica Neue", Arial, sans-serif, Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace, "PT Serif", Georgia, Times, "Times New Roman", serif;
   background-color: #ffffe5;
   width: 300px;
   padding: 0.5em;
@@ -231,4 +231,12 @@
   border-style: solid;
   border-width: 3px;
   border-color: #ff3333;
+}
+/* line 117, ../sass/jquery.note.scss */
+#note > a.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px;
+  background: #ffffff;
 }
