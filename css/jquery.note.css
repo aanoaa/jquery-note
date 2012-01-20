@@ -1,0 +1,246 @@
+/* incase an inverted custom gradient isn't specified */
+/* line 177, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+.fancy-button-reset-base-class, #note a.button {
+  font-family: "Lucida Grande", Lucida, Arial, sans-serif;
+  background: url('/images/button_bg.png?1327052825') repeat-x bottom left;
+  margin: 0;
+  width: auto;
+  overflow: visible;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  border-style: solid;
+  font-weight: bold;
+}
+/* line 165, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+.fancy-button-reset-base-class::-moz-focus-inner, #note a.button::-moz-focus-inner {
+  border: none;
+  padding: 0;
+}
+/* line 168, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+.fancy-button-reset-base-class:focus, #note a.button:focus {
+  outline: none;
+}
+
+/* line 13, ../sass/jquery.note.scss */
+#note {
+  font: 12px "PT Sans", "Helvetica Neue", Arial, sans-serif, Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace, "PT Serif", Georgia, Times, "Times New Roman", serif;
+  background-color: #ffffe5;
+  width: 300px;
+  padding: 0.5em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0px 0px 5px #333333;
+  -webkit-box-shadow: 0px 0px 5px #333333;
+  -o-box-shadow: 0px 0px 5px #333333;
+  box-shadow: 0px 0px 5px #333333;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #dddddd;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+/* line 24, ../sass/jquery.note.scss */
+#note span.user, #note span.timestamp {
+  overflow: hidden;
+}
+/* line 27, ../sass/jquery.note.scss */
+#note span.user {
+  font-weight: bold;
+}
+/* line 30, ../sass/jquery.note.scss */
+#note span.timestamp {
+  text-align: right;
+}
+/* line 33, ../sass/jquery.note.scss */
+#note a.button {
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -o-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -khtml-border-radius: 6px;
+  border-radius: 6px;
+  font-size: 18px;
+  line-height: 1.2em;
+  padding: 0.3em 1em;
+  border-width: 1px;
+  background-color: white;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(10%, #ffffff), color-stop(50%, #d5d5d5), color-stop(50%, #cecece), color-stop(100%, #e7e7e7));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 10%, #d5d5d5 50%, #cecece 50%, #e7e7e7);
+  background-image: -moz-linear-gradient(#ffffff, #ffffff 10%, #d5d5d5 50%, #cecece 50%, #e7e7e7);
+  background-image: -o-linear-gradient(#ffffff, #ffffff 10%, #d5d5d5 50%, #cecece 50%, #e7e7e7);
+  background-image: -ms-linear-gradient(#ffffff, #ffffff 10%, #d5d5d5 50%, #cecece 50%, #e7e7e7);
+  background-image: linear-gradient(#ffffff, #ffffff 10%, #d5d5d5 50%, #cecece 50%, #e7e7e7);
+  border-color: #b7b7b7;
+  text-shadow: white 0px 1px 1px;
+  -moz-box-shadow: rgba(255, 255, 255, 0.867) 0 0 0.1em 1px inset;
+  -webkit-box-shadow: rgba(255, 255, 255, 0.867) 0 0 0.1em 1px inset;
+  -o-box-shadow: rgba(255, 255, 255, 0.867) 0 0 0.1em 1px inset;
+  box-shadow: rgba(255, 255, 255, 0.867) 0 0 0.1em 1px inset;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  -o-background-clip: padding-box;
+  -ms-background-clip: padding-box;
+  -khtml-background-clip: padding-box;
+  background-clip: padding-box;
+  font-size: 1em;
+}
+/* line 120, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+#note a.button, #note a.button:visited {
+  color: #222222;
+}
+/* line 31, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+#note a.button:hover, #note a.button:focus {
+  background-color: white;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(10%, #fcfcfc), color-stop(50%, #cecece), color-stop(50%, #c6c6c6), color-stop(100%, #e0e0e0));
+  background-image: -webkit-linear-gradient(#ffffff, #fcfcfc 10%, #cecece 50%, #c6c6c6 50%, #e0e0e0);
+  background-image: -moz-linear-gradient(#ffffff, #fcfcfc 10%, #cecece 50%, #c6c6c6 50%, #e0e0e0);
+  background-image: -o-linear-gradient(#ffffff, #fcfcfc 10%, #cecece 50%, #c6c6c6 50%, #e0e0e0);
+  background-image: -ms-linear-gradient(#ffffff, #fcfcfc 10%, #cecece 50%, #c6c6c6 50%, #e0e0e0);
+  background-image: linear-gradient(#ffffff, #fcfcfc 10%, #cecece 50%, #c6c6c6 50%, #e0e0e0);
+  border-color: #afafaf;
+  text-shadow: white 0px 1px 1px;
+}
+/* line 120, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+#note a.button:hover, #note a.button:hover:visited, #note a.button:focus, #note a.button:focus:visited {
+  color: #222222;
+}
+/* line 36, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+#note a.button:active {
+  background-color: white;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cecece), color-stop(30%, #d3d3d3), color-stop(50%, #c9c9c9), color-stop(50%, #c1c1c1), color-stop(100%, #e2e2e2));
+  background-image: -webkit-linear-gradient(#cecece, #d3d3d3 30%, #c9c9c9 50%, #c1c1c1 50%, #e2e2e2);
+  background-image: -moz-linear-gradient(#cecece, #d3d3d3 30%, #c9c9c9 50%, #c1c1c1 50%, #e2e2e2);
+  background-image: -o-linear-gradient(#cecece, #d3d3d3 30%, #c9c9c9 50%, #c1c1c1 50%, #e2e2e2);
+  background-image: -ms-linear-gradient(#cecece, #d3d3d3 30%, #c9c9c9 50%, #c1c1c1 50%, #e2e2e2);
+  background-image: linear-gradient(#cecece, #d3d3d3 30%, #c9c9c9 50%, #c1c1c1 50%, #e2e2e2);
+  border-color: #a7a7a7;
+  text-shadow: white 0px -1px -1px;
+  -moz-box-shadow: #b7b7b7 0 0.08em 0.2em 1px inset;
+  -webkit-box-shadow: #b7b7b7 0 0.08em 0.2em 1px inset;
+  -o-box-shadow: #b7b7b7 0 0.08em 0.2em 1px inset;
+  box-shadow: #b7b7b7 0 0.08em 0.2em 1px inset;
+}
+/* line 120, ../../../.rvm/gems/ruby-1.9.2-p290/gems/fancy-buttons-1.1.2/lib/stylesheets/_fancy-buttons.sass */
+#note a.button:active, #note a.button:active:visited {
+  color: #222222;
+}
+/* line 37, ../sass/jquery.note.scss */
+#note > div.status {
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+/* line 43, ../sass/jquery.note.scss */
+#note > div.status > label {
+  display: inline-block;
+  width: 15%;
+  padding: 0.5em;
+  text-align: center;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  border-width: 1px;
+}
+/* line 52, ../sass/jquery.note.scss */
+#note > div.status > span {
+  display: inline-block;
+}
+/* line 55, ../sass/jquery.note.scss */
+#note > div.status > span.user {
+  width: 35%;
+}
+/* line 58, ../sass/jquery.note.scss */
+#note > div.status > span.timestamp {
+  width: 40%;
+}
+/* line 62, ../sass/jquery.note.scss */
+#note > div.status.open label, #note > div.status.reopen label {
+  background-color: #00e600;
+}
+/* line 67, ../sass/jquery.note.scss */
+#note > div.status.close label {
+  background-color: #ff3333;
+}
+/* line 72, ../sass/jquery.note.scss */
+#note > div.content {
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-color: black;
+}
+/* line 79, ../sass/jquery.note.scss */
+#note > div.content > div.header > span {
+  display: inline-block;
+}
+/* line 82, ../sass/jquery.note.scss */
+#note > div.content > div.header > span.user {
+  width: 56%;
+}
+/* line 85, ../sass/jquery.note.scss */
+#note > div.content > div.header > span.timestamp {
+  width: 40%;
+}
+/* line 90, ../sass/jquery.note.scss */
+#note > div.content > div.body > pre {
+  font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
+  padding: 0.5em;
+  color: white;
+  background-color: gray;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  overflow: auto;
+}
+/* line 101, ../sass/jquery.note.scss */
+#note > div.memo textarea {
+  width: 98%;
+  height: 5em;
+}
+/* line 105, ../sass/jquery.note.scss */
+#note > div.memo > ul.menu {
+  margin: 0;
+  padding: 0.5em 0 0 0;
+  text-align: right;
+}
+/* line 109, ../sass/jquery.note.scss */
+#note > div.memo > ul.menu > li {
+  display: inline;
+}
+/* line 114, ../sass/jquery.note.scss */
+#note.open, #note.reopen {
+  border-style: solid;
+  border-width: 3px;
+  border-color: #00e600;
+}
+/* line 117, ../sass/jquery.note.scss */
+#note.close {
+  border-style: solid;
+  border-width: 3px;
+  border-color: #ff3333;
+}
+/* line 120, ../sass/jquery.note.scss */
+#note > a.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px;
+  background: #ffffff;
+}

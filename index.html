@@ -1,52 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
-<head>
-  <title>jQuery.note</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="stylesheet" href="jquery.note.css" type="text/css" media="screen" />
-  <script type="text/javascript" src="jquery-1.6.2.js"></script>
-  <script type="text/javascript" src="jquery.note.js"></script>
-  <script type="text/javascript">
-(function() {
-  $(function() {
-    $(document).bind('init.note', function(e, opts) {
-      return console.log("'init.note' fired with '" + opts.cmd + "' cmd");
-    });
-    $(document).bind('afterClose.note', function() {
-      return console.log("'afterClose.note' fired");
-    });
-    $(document).bind('beforeSend.note', function(e, note) {
-      return console.log("'beforeSend.note' fired");
-    });
-    $(document).bind('afterSuccess.note', function(e, data) {
-      return console.log("'afterSuccess.note' fired");
-    });
-    $(document).bind('beforeReveal.note', function(e, data) {
-      console.log("'beforeReveal.note' fired");
-      return console.log(data);
-    });
-    $(document).bind('afterReveal.note', function(e, data) {
-      console.log("'afterReveal.note' fired");
-      return console.log(data);
-    });
-    $(document).bind('changeStatus.note', function(e, data) {
-      console.log("'changeStatus.note' fired");
-      return console.log(data);
-    });
-    return $("a.note").note({
-      debug: true
-    });
-  });
-}).call(this);
-  </script>
-  <style type="text/css">
-    body {
-      margin: 1em;
-    }
-  </style>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>jquery-note</title>
+    <link rel="stylesheet" href="css/jquery.note.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="script/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="script/jquery.note.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("a[title=note]").each(function() {
+          $(this).note();
+        });
+      })
+    </script>
 </head>
 <body>
-<a href="#" class="note" />
+  <ul>
+    <li><a title="note">note</a></li>
+    <li><a title="note">another note</a>
+  </ul>
 </body>
 </html>
