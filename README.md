@@ -6,7 +6,7 @@ body.
 
 [Demo](http://aanoaa.github.com/jquery-note)
 
-![capture](https://github.com/downloads/aanoaa/jquery-note/note.png)
+![capture](https://lh5.googleusercontent.com/-0TusrT1pxqA/Txk9pS0yFcI/AAAAAAAAABQ/AuhNXWl4ZrA/jquey.note.png)
 
 
 Usage
@@ -15,34 +15,25 @@ Usage
     <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="utf-8" />
         <title>jquery-note</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="src/jquery.note.css" type="text/css" media="screen" />
-        <script type="text/javascript" src="src/jquery-1.6.2.js"></script>
-        <script type="text/javascript" src="src/jquery.note.js"></script>
+        <link rel="stylesheet" href="css/jquery.note.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="script/jquery-1.6.2.js"></script>
+        <script type="text/javascript" src="script/jquery.note.js"></script>
         <script type="text/javascript">
-           (function() {
-             $(function() {
-               // add hook what you want
-               $(document).bind('init.note', function(e, opts) {});
-               $(document).bind('afterClose.note', function() {});
-               $(document).bind('beforeSend.note', function(e, note) {});
-               $(document).bind('afterSuccess.note', function(e, data) {});
-               $(document).bind('beforeReveal.note', function(e, data) {});
-               $(document).bind('afterReveal.note', function(e, data) {});
-               $(document).bind('changeStatus.note', function(e, data) {});
-
-               // bind element
-               return $("a.note").note({
-                 debug: true
-               });
-             });
-           }).call(this);
+          $(document).ready(function() {
+            $("a[title=note]").each(function() {
+              $(this).note();
+            });
+          })
         </script>
-      </head>
-      <body>
-        <a href="#" class="note" />
-      </body>
+    </head>
+    <body>
+      <ul>
+        <li><a title="note">note</a></li>
+        <li><a title="note">another note</a>
+      </ul>
+    </body>
     </html>
 
 ### event
@@ -72,6 +63,5 @@ Usage
 
 - debug - true|false 
 - closeImage - `src/closelabel.png` path
-- loadingImage - `src/loading.gif` path
 - autoClose - automatic close note after something interaction
 - extraParams - see the above `url` and `status`
