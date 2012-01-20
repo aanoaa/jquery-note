@@ -21,6 +21,9 @@ $background-color: lighten(yellow, 45%);
     position: absolute;
     top: 10px;
     right: 10px;
+    span.user, span.timestamp {
+        overflow: hidden;
+    }
     span.user {
         font-weight: bold;
     }
@@ -77,10 +80,10 @@ $background-color: lighten(yellow, 45%);
                 display: inline-block;
             }
             > span.user {
-                width: 50%;
+                width: 56%;
             }
             > span.timestamp {
-                width: 46%;
+                width: 40%;
             }
         }
         > div.body {
