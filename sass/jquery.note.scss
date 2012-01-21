@@ -18,9 +18,11 @@ $background-color: lighten(yellow, 45%);
     @include border-radius;
     @include box-shadow;
     @include border;
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 10px;
+    max-height: 660px;
+    overflow: auto;
     span.user, span.timestamp {
         overflow: hidden;
     }
